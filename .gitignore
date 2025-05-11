@@ -1,0 +1,52 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# === ASP.NET Core ===
+
+Cinematrix.API/bin/
+Cinematrix.API/obj/
+Cinematrix.API/*.user
+Cinematrix.API/*.suo
+Cinematrix.API/.vs/
+Cinematrix.API/*.db
+
+
+# Compiled output
+Cinematrix.Web/dist
+Cinematrix.Web/tmp
+Cinematrix.Web/out-tsc
+Cinematrix.Web/bazel-out
+
+# Node
+Cinematrix.Web/node_modules
+Cinematrix.Web/npm-debug.log
+Cinematrix.Web/yarn-error.log
+
+# IDEs and editors
+Cinematrix.Web/.idea/
+Cinematrix.Web/.project
+Cinematrix.Web/.classpath
+Cinematrix.Web/.c9/
+Cinematrix.Web/*.launch
+Cinematrix.Web/.settings/
+Cinematrix.Web/*.sublime-workspace
+
+# Visual Studio Code
+Cinematrix.Web/.vscode/*
+Cinematrix.Web/!.vscode/settings.json
+Cinematrix.Web/!.vscode/tasks.json
+Cinematrix.Web/!.vscode/launch.json
+Cinematrix.Web/!.vscode/extensions.json
+Cinematrix.Web/.history/*
+
+# Miscellaneous
+Cinematrix.Web/.angular/cache
+Cinematrix.Web/.sass-cache/
+Cinematrix.Web/connect.lock
+Cinematrix.Web/coverage
+Cinematrix.Web/libpeerconnection.log
+Cinematrix.Web/testem.log
+Cinematrix.Web/typings
+
+# System files
+**/.DS_Store
+**/Thumbs.db

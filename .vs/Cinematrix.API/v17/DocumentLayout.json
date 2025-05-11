@@ -1,0 +1,336 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\controllers\\carteleracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\controllers\\carteleracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\dto\\carteleradto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\dto\\carteleradto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\datos\\cinematrixcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\datos\\cinematrixcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\dto\\peliculadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\dto\\peliculadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\utilidades\\automapperprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\utilidades\\automapperprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\dto\\sesiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\dto\\sesiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\migrations\\20250511093908_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\migrations\\20250511093908_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\pelicula.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\pelicula.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\sala.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\sala.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\ocupacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\ocupacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\compra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\compra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\tarifa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\tarifa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|d:\\cinematrix\\cinematrixapp\\cinematrix.api\\cinematrix.api\\entidades\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B61F44D4-8EC7-45F2-98B7-E2B5DFD387D9}|Cinematrix.API\\Cinematrix.API.csproj|solutionrelative:cinematrix.api\\entidades\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 13,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CarteleraDTO.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\CarteleraDTO.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\DTO\\CarteleraDTO.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\CarteleraDTO.cs",
+              "RelativeToolTip": "Cinematrix.API\\DTO\\CarteleraDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T09:49:56.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "20250511093908_InitialCreate.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Migrations\\20250511093908_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Migrations\\20250511093908_InitialCreate.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Migrations\\20250511093908_InitialCreate.cs",
+              "RelativeToolTip": "Cinematrix.API\\Migrations\\20250511093908_InitialCreate.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAcwGIAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T09:39:24.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Compra.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Compra.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Compra.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Compra.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Compra.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:45:19.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Pelicula.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Pelicula.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Pelicula.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Pelicula.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Pelicula.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:45:17.037Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Sesion.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Sesion.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Sesion.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Sesion.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Sesion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:46:31.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Ocupacion.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Ocupacion.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Ocupacion.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Ocupacion.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Ocupacion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:45:13.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Sala.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Sala.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Sala.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Sala.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Sala.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:53:14.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CinematrixContext.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Datos\\CinematrixContext.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Datos\\CinematrixContext.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Datos\\CinematrixContext.cs",
+              "RelativeToolTip": "Cinematrix.API\\Datos\\CinematrixContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:46:22.718Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Ticket.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Ticket.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Ticket.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Ticket.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Ticket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:53:24.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Usuario.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Usuario.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Usuario.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:53:28.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Program.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Program.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Program.cs",
+              "RelativeToolTip": "Cinematrix.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAACOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-05T18:34:47.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PeliculaDTO.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\PeliculaDTO.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\DTO\\PeliculaDTO.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\PeliculaDTO.cs",
+              "RelativeToolTip": "Cinematrix.API\\DTO\\PeliculaDTO.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAADwvxoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T10:39:21.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CarteleraController.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Controllers\\CarteleraController.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Controllers\\CarteleraController.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Controllers\\CarteleraController.cs",
+              "RelativeToolTip": "Cinematrix.API\\Controllers\\CarteleraController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T09:42:39.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AutoMapperProfiles.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Utilidades\\AutoMapperProfiles.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Utilidades\\AutoMapperProfiles.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Utilidades\\AutoMapperProfiles.cs",
+              "RelativeToolTip": "Cinematrix.API\\Utilidades\\AutoMapperProfiles.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T10:31:48.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SesionDTO.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\SesionDTO.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\DTO\\SesionDTO.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\DTO\\SesionDTO.cs",
+              "RelativeToolTip": "Cinematrix.API\\DTO\\SesionDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T10:37:10.827Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Cinematrix.API\\appsettings.Development.json",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\appsettings.Development.json",
+              "RelativeToolTip": "Cinematrix.API\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-08T18:49:52.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Cinematrix.API\\appsettings.json",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\appsettings.json",
+              "RelativeToolTip": "Cinematrix.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-08T18:58:21.025Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Tarifa.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Tarifa.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Tarifa.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Tarifa.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Tarifa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:46:50.869Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Rol.cs",
+              "DocumentMoniker": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Rol.cs",
+              "RelativeDocumentMoniker": "Cinematrix.API\\Entidades\\Rol.cs",
+              "ToolTip": "D:\\CINEMATRIX\\CinematrixApp\\Cinematrix.API\\Cinematrix.API\\Entidades\\Rol.cs",
+              "RelativeToolTip": "Cinematrix.API\\Entidades\\Rol.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T08:53:11.676Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
