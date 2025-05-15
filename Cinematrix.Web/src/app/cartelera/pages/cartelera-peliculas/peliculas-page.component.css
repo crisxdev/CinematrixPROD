@@ -1,3 +1,47 @@
-:host {
-  display: block;
+.mio {
+    position: relative;
+    /* aspect-ratio: 16/9; */
+    /* width:350px;
+    height: 350px; */
+    background-size: cover;
+    background-image: url("/img/peli-1.jpg");
+    background-repeat: no-repeat;
+}
+
+.mio::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* background: red; */
+    background: inherit;
+    content: "";
+    filter: blur(15px) saturate(1.5);
+    width: 100%;
+    height: 100%;
+    /* scale: 1.02; */
+    z-index: -1;
+    transition: filter 0.3s ease;
+}
+
+
+
+.cine {
+    background-image: url("/img/cinematrix-2.avif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* position: relative; */
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.titulo-gradiente {
+    background: linear-gradient(90deg,
+    #8b1c1c,
+    #b22222,
+    #cc3333,
+    #e05252,
+    #f08080
+  );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

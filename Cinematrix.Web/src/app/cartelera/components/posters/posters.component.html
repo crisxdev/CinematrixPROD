@@ -1,0 +1,25 @@
+
+
+<div class="carousel relative w-full max-w-[1200px]  md:max-h-[440px] md:h-[440px] mt-10 aspect-[16/9]">
+
+  @for(poster of posters();track poster;let idx=$index;){
+<!-- ./img/posters/poster-4.jpg -->
+<!-- relative -->
+<div id="{{poster.url}}" class="carousel-item absolute top-0 left-0 transition-opacity duration-800 ease-in-out w-full h-full" [ngClass]="idx === currentSlide() ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+    <img
+      src={{poster.url}}
+
+      class="w-full h-full md:h-[440px] md:w-full md:object-cover"/>
+
+      <span class="hidden md:block md:absolute  md:top-100 md:left-[20px]">Foto de <span class="text-red-600 font-bold">{{poster.autor}}</span> en <span class="text-red-600 font-bold">{{platform}}</span></span>
+      <!-- <span class="absolute top-100 left-[20px]">Foto de <a class="text-red-600" href="https://unsplash.com/es/@kristsll?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Krists Luhaers</a> en <a class="text-red-600" href="https://unsplash.com/es/fotos/persona-viendo-la-pelicula-AtPWnYNDJnM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a> -->
+      <!-- </span> -->
+    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+      <button (click)="prevSlide()" class="btn btn-circle">❮</button>
+      <button (click)="nextSlide()" class="btn btn-circle">❯</button>
+    </div>
+  </div>
+  }
+
+
+</div>

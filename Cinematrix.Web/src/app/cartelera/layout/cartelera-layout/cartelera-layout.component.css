@@ -1,0 +1,8 @@
+.cine {
+    background-image: url("/img/cinematrix-2.avif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* position: relative; */
+    background-position: center;
+    background-attachment: fixed;
+}

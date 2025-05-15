@@ -1,0 +1,148 @@
+@if(isLoading()){
+<div class="flex flex-col items-center justify-center my-20">
+  <span class="loader"></span>
+</div>
+}
+
+<div class="flex w-full flex-col mt-15 max-w-[1200px] mx-auto">
+  <div class="divider divider-error">
+    <h2 class="text-4xl">
+      Nuestra <i class="text-red-500 font-semibold">cartelera</i>
+    </h2>
+  </div>
+</div>
+
+
+  <!--FILTROS-->
+  <div class="w-full h-20 info max-w-[1200px] mx-auto">
+    <h2 class="text-white text-2xl">Filtros</h2>
+
+   
+
+  </div>
+
+  <!-- <h2 class="text-2xl mt-15">Nuestra cartelera</h2> -->
+  <!-- flex gap-x-16 justify-center flex-wrap -->
+  <div class="grid-peliculas mx-auto max-w-[1200px] mt-10">
+    @for (film of films();track film.id;) {
+    <div class="relative h-[312px] rounded-[6px] bg-black">
+      <div
+        (mouseenter)="onMouseOverFilm($event, film.id)"
+        (mouseleave)="onMouseLeaveFilm()"
+        class="w-[220px] mt-5"
+      >
+        <div
+          class="absolute top-0 left-0 w-full h-full bg-black transition-opacity duration-500 pt-4 pb-4 rounded-[5px] border-2 border-red-600 z-10 flex flex-col justify-between"
+          [ngClass]="idFilmSelected() === film.id ? 'opacity-100' : 'opacity-0'"
+        >
+          @if(film.sesiones.length===0){
+
+          <div class="px-[10px]">
+            <h2
+              class="text-[18px] font-medium m-0 mb-4 text-red-600 cursor-pointer"
+            >
+              {{ film.titulo }}
+            </h2>
+          </div>
+
+          <p class="text-xl text-red-600">No hay sesiones disponibles</p>
+          }@else{
+
+          <div class="flex flex-col items-center">
+            <div class="px-[10px]">
+              <p
+                class="text-[18px] font-medium m-0 mb-4 text-red-600 cursor-pointer"
+              >
+                {{ film.titulo }}
+              </p>
+            </div>
+
+            <div class="w-full flex justify-center">
+              <div class="flex gap-2 items-center justify-center flex-wrap">
+                @for (sesion of film.sesiones; track sesion.id) {
+                <div
+                  class="cursor-pointer hover:bg-white active:bg-white hover:text-red-600 w-auto px-[8px] py-[3px] bg-red-600 transition-colors duration-300"
+                >
+                  <p>{{ transformDate(sesion.inicio) }}</p>
+                </div>
+
+                }
+              </div>
+            </div>
+          </div>
+          <!--
+        <button class="w-[100px] border-2 text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-500">
+          <p>Trailer</p>
+        </button> -->
+          <div class="px-4">
+            <button
+              class="px-4 flex items-center cursor-pointer justify-center gap-1 py-1 border-2 border-red-600 text-red-600 rounded-full font-semibold tracking-wide hover:bg-red-600 hover:text-white transition-colors duration-500"
+            >
+              Trailer
+              <svg
+                class="fill-current mt-[3px]"
+                fill="#000000"
+                height="15px"
+                width="15px"
+                version="1.1"
+                id="Capa_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 210 210"
+                xml:space="preserve"
+              >
+                <path d="M179.07,105L30.93,210V0L179.07,105z" />
+              </svg>
+            </button>
+          </div>
+          }
+        </div>
+
+        <!-- <div class="bg-black w-full h-full transition duration-300"></div> -->
+        <!-- w-full -->
+        <img
+          class="absolute top-0 left-0 h-full object-cover transition-opacity duration-500 w-full rounded-[5px]"
+          [ngClass]="idFilmSelected() === film.id ? 'opacity-0' : 'opacity-100'"
+          src="./img/peli-1.jpg"
+          alt=""
+        />
+
+        <!--class="h-100 mt-5 mio"-->
+
+        <!-- <img class="w-full h-full object-cover" src="./img/peli-1.jpg" alt="" /> -->
+
+        <!-- <img class="max-w-full h-auto max-h-full block" src="./img/peli-1.jpg" alt="" /> -->
+
+        <!-- <div class="w-full info bg-amber-100 h-30 pt-3">
+      <div class="flex gap-x-6 max-w-full flex-wrap">
+      @for(sesion of film.sesiones;track sesion){
+        <p class="text-white">hhh</p>
+        <div class="w-[auto] bg-black">
+        <p>{{transformDate(sesion.inicio)}}</p>
+        </div>
+      }
+      </div>
+      <div
+        class="h-8 p-0 bg-gray-900 py-4 flex justify-center items-center border-b-2"
+      >
+        <p class="text-white font-bold text-[18px]">{{ film.titulo }}</p>
+      </div>
+    </div> -->
+      </div>
+    </div>
+    }
+  </div>
+
+<!-- @for (film of films(); track film.id) {
+<div
+  (mouseenter)="onMouseOverFilm($event, film.id)"
+  (mouseleave)="onMouseLeaveFilm()"
+  class="w-50 h-50 bg-black"
+>
+  @if (idFilmSelected()===film.id) {
+  <div>Bloque A</div>
+  } @else {
+  <div>Bloque B</div>
+  }
+</div>
+} -->
