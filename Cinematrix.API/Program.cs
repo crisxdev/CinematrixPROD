@@ -7,6 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 var cadenaDeConexion = builder.Configuration.GetValue<string>("DefaultConnection");
 
 //Inicio del área de servicios
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // URL del frontend Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -24,7 +35,8 @@ var app = builder.Build();
 
 
 //Inicio del área de los middlewares
-
+app.UseStaticFiles();
+app.UseCors("AllowAngularDev");
 app.MapControllers();
 
 //Fin del área de los middlewares
