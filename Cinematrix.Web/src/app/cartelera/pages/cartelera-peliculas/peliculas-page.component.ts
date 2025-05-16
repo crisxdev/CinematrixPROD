@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CarteleraService } from '../../services/cartelera.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ListaPeliculasComponent } from '../../components/lista-peliculas/lista-peliculas.component';
@@ -37,10 +37,24 @@ export class PeliculasPageComponent {
     },
   ];
 
+  query=signal<string|undefined>(undefined);
 
   carteleraResource = rxResource({
-    loader: () => {
-      return this.carteleraService.searchCartelera();
+     request:()=>({
+        query:this.query()
+      }),
+    loader: ({request}) => {
+      if(!request) return this.carteleraService.searchCartelera();
+
+      return this.carteleraService.searchCartelera(request.query)
+
     },
   });
+
+
+  searchByDay(queryDay:string){
+
+    this.query.set(queryDay);
+  }
+
 }

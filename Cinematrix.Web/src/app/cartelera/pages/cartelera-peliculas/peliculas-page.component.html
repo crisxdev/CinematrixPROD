@@ -34,6 +34,7 @@
     [isLoading]="carteleraResource.isLoading()"
     [errorMessage]="carteleraResource.error()"
     [isEmpty]="(carteleraResource.value()?.length==0)"
+    (dia)="searchByDay($event)"
     >
 
     </app-lista-peliculas>

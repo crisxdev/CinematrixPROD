@@ -1,64 +1,116 @@
-import { Component, input, NgModule, signal } from '@angular/core';
-import { Pelicula } from '../../interfaces/pelicula.interface';
-import { NgClass, NgStyle } from '@angular/common';
-// import { DatePickerModule } from 'primeng/datepicker';
-import { DatePickerModule } from 'primeng/datepicker';
-
 import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  input,
+  NgModule,
+  Output,
+  signal,
+} from '@angular/core';
+import { Pelicula } from '../../interfaces/pelicula.interface';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
+import { rxResource } from '@angular/core/rxjs-interop';
+// import { DatePickerModule } from 'primeng/datepicker';
+import { CarteleraService } from '../../services/cartelera.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Fechas } from '../../interfaces/fechas.interface';
+import { environment } from '../../../../environment.development';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lista-peliculas',
 
-  imports: [NgClass,DatePickerModule, ReactiveFormsModule],
+  imports: [NgClass, DatePipe, ReactiveFormsModule, NgStyle],
   templateUrl: './lista-peliculas.component.html',
   styleUrl: './lista-peliculas.component.css',
 })
 export class ListaPeliculasComponent {
 
 
+  private fb = inject(FormBuilder);
+  @Output() dia = new EventEmitter<string>();
 
-  
-  films=input<Pelicula[]>();
-  errorMessage=input<string|unknown|null>()
-  isLoading=input<boolean>(false)
-  isEmpty=input<boolean>(false)
-  hovering=signal(false)
-  isOver=signal(false);
-  idFilmSelected=signal(-1)
-  onMouseLeaveFilm(){
-       this.hovering.set(false);
-    // this.isOver.set(false)
-    this.idFilmSelected.set(-1)
-    console.log(this.idFilmSelected())
-    console.log(this.idFilmSelected())
+  form: FormGroup = this.fb.group({
+    fecha: [null],
+  });
 
+  carteleraService = inject(CarteleraService);
+  cantidadFechas = 7;
+
+  dateSelected: Date | null = null;
+
+  films = input<Pelicula[]>();
+  errorMessage = input<string | unknown | null>();
+  isLoading = input<boolean>(false);
+  isEmpty = input<boolean>(false);
+  hovering = signal<boolean>(false);
+  isOver = signal<boolean>(false);
+  idFilmSelected = signal(-1);
+
+  carteleraResource = rxResource({
+    loader: () => {
+      return this.carteleraService.getDates(this.cantidadFechas);
+    },
+  });
+
+  trailer=signal<SafeResourceUrl>("");
+  valueResource = this.carteleraResource.value();
+
+  isOpenModal = signal(false);
+
+  constructor(private sanitizer:DomSanitizer) {
+    effect(() => {
+      const data = this.carteleraResource.value();
+      const dates = data?.listaFechas ?? [];
+
+      if (dates.length > 0 && !this.form.value.fecha) {
+        this.form.patchValue({ fecha: dates[0] });
+      }
+    });
   }
 
-  onMouseOverFilm(event:MouseEvent,id:number){
+  onMouseLeaveFilm() {
+    this.hovering.set(false);
+    // this.isOver.set(false)
+    this.idFilmSelected.set(-1);
+    console.log(this.idFilmSelected());
+    console.log(this.idFilmSelected());
+  }
+
+  onMouseOverFilm(event: MouseEvent, id: number) {
     // this.isOver.set(true)
     this.hovering.set(true);
     event.stopPropagation();
-    console.log(event.target)
-    console.log({id,
-    })
-    this.idFilmSelected.set(id)
-    console.log(this.idFilmSelected())
+    console.log(event.target);
+    console.log({ id });
+    this.idFilmSelected.set(id);
+    console.log(this.idFilmSelected());
   }
 
-
-  transformDate(fecha:Date){
-    const sesion=new Date(fecha);
+  transformDate(fecha: Date) {
+    const sesion = new Date(fecha);
     const hour = sesion.getHours().toString().padStart(2, '0');
     const minutes = sesion.getMinutes().toString().padStart(2, '0');
-    return`${hour}:${minutes}`;
+    return `${hour}:${minutes}`;
   }
 
+  onSubmit() {
+    const selection = this.form.value.fecha;
+    this.dateSelected = selection;
+    const fechaObj = new Date(this.dateSelected ?? '');
+    this.dia.emit(fechaObj.toISOString());
+    // this.carteleraService.searchCartelera(fechaObj.toISOString());
+  }
 
- }
+  getImagenUrl(nombre: string) {
+    return `${environment.baseUrlImages}${nombre}`;
+  }
+
+  onHandleClickTrailer(trailerURL:string) {
+    console.log(trailerURL);
+    this.isOpenModal.set(true);
+    const urlSanitizada=this.sanitizer.bypassSecurityTrustResourceUrl(trailerURL)
+    this.trailer.set(urlSanitizada);
+  }
+}

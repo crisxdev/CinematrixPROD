@@ -1,4 +1,6 @@
+import { Fechas } from '../interfaces/fechas.interface';
 import { Pelicula, Sesion } from '../interfaces/pelicula.interface';
+import { FechasREST } from '../interfaces/rest-fecha.interface';
 import {
   RESTPelicula,
   RESTSesion,
@@ -38,6 +40,11 @@ export class CarteleraMapper {
     return peliculas.map(this.mapRESTFilmToFilm);
   };
 
+  static mapRESTfechasToFechas=(fechas:FechasREST):Fechas=>{
+    return {
+      listaFechas:fechas.listaFechas
+    }
+  }
   // static RESTCountry => country
 
   // static RESTCountry[]=> Country[]
