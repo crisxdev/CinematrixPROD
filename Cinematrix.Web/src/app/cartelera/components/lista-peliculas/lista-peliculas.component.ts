@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Fechas } from '../../interfaces/fechas.interface';
 import { environment } from '../../../../environment.development';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-peliculas',
@@ -26,9 +27,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './lista-peliculas.component.css',
 })
 export class ListaPeliculasComponent {
-
-
   private fb = inject(FormBuilder);
+  private router=inject(Router)
   @Output() dia = new EventEmitter<string>();
 
   form: FormGroup = this.fb.group({
@@ -54,12 +54,12 @@ export class ListaPeliculasComponent {
     },
   });
 
-  trailer=signal<SafeResourceUrl>("");
+  trailer = signal<SafeResourceUrl>('');
   valueResource = this.carteleraResource.value();
 
   isOpenModal = signal(false);
 
-  constructor(private sanitizer:DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer) {
     effect(() => {
       const data = this.carteleraResource.value();
       const dates = data?.listaFechas ?? [];
@@ -79,13 +79,9 @@ export class ListaPeliculasComponent {
   }
 
   onMouseOverFilm(event: MouseEvent, id: number) {
-    // this.isOver.set(true)
     this.hovering.set(true);
     event.stopPropagation();
-    console.log(event.target);
-    console.log({ id });
     this.idFilmSelected.set(id);
-    console.log(this.idFilmSelected());
   }
 
   transformDate(fecha: Date) {
@@ -107,10 +103,15 @@ export class ListaPeliculasComponent {
     return `${environment.baseUrlImages}${nombre}`;
   }
 
-  onHandleClickTrailer(trailerURL:string) {
+  onHandleClickTrailer(trailerURL: string) {
     console.log(trailerURL);
     this.isOpenModal.set(true);
-    const urlSanitizada=this.sanitizer.bypassSecurityTrustResourceUrl(trailerURL)
+    const urlSanitizada =
+      this.sanitizer.bypassSecurityTrustResourceUrl(trailerURL);
     this.trailer.set(urlSanitizada);
+  }
+
+  onHandleClickSession(id: number) {
+    this.router.navigate(['cartelera/sesion',id])
   }
 }

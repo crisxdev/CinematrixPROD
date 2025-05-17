@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+
+.info {
+  position: relative;
+  background: rgba(234, 229, 229, 0.217);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  /* padding: 1rem; */
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.201);
+  border-top: none;
+  width: 100%;
+
+  /* z-index: 10; */
+}

@@ -6,6 +6,8 @@ import { RESTPelicula } from '../interfaces/rest-pelicula.interface';
 import { CarteleraMapper } from '../mappers/cartelera.mapper';
 import { Fechas } from '../interfaces/fechas.interface';
 import { ChildActivationEnd } from '@angular/router';
+import { Tarifa } from '../interfaces/tarifa.interface';
+import { RESTTarifa } from '../interfaces/rest-tarifa.interface';
 
 const API_URL = 'https://localhost:7243/api/cartelera';
 @Injectable({
@@ -22,7 +24,7 @@ export class CarteleraService {
   //  }
 
   searchCartelera(fechaIso?: string) {
-    console.log(fechaIso);
+
     if (fechaIso) {
       return this.http.get<RESTPelicula[]>(`${API_URL}?dia=${fechaIso}`).pipe(
         map(CarteleraMapper.mapRESTfilmArrayToFilmArray),
@@ -51,6 +53,18 @@ export class CarteleraService {
       })
     );
   }
+
+  getTarifas(){
+
+    return this.http.get<RESTTarifa[]>(`${API_URL}/tarifas`).pipe(
+       map(CarteleraMapper.mapRESTarifaArrayToTarifaArray),
+      tap((res)=>console.log('res:',res)),
+      catchError((error)=>{
+        return throwError(()=>new Error('Error al obtener las tarifas'))
+      })
+    )
+  }
+
 
   // getByDate(fecha: string) {
   //   return this.http

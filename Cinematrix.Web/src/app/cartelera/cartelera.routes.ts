@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { PeliculasPageComponent } from './pages/cartelera-peliculas/peliculas-page.component';
 import { CarteleraLayoutComponent } from './layout/cartelera-layout/cartelera-layout.component';
+import { CarteleraSesionPageComponent } from './pages/cartelera-sesion-page/cartelera-sesion-page.component';
+
 
 export const countryRoutes: Routes = [
   {
@@ -15,22 +17,17 @@ export const countryRoutes: Routes = [
         path: '',
         component: PeliculasPageComponent,
       },
+
+        {
+        path: 'sesion/:id',
+        component: CarteleraSesionPageComponent,
+      },
       {
         path: '**', //Si no encuentra ninguna ruta hija redirige a la ruta hija peliculas
         redirectTo: 'peliculas',
       },
     ],
   },
-
-  // {
-  //   path:'country',
-
-  // },
-  // {
-  //   path:'**',
-  //   redirectTo:''
-
-  // },
 ];
 
 export default countryRoutes;

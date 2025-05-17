@@ -5,6 +5,8 @@ import {
   RESTPelicula,
   RESTSesion,
 } from '../interfaces/rest-pelicula.interface';
+import { RESTTarifa } from '../interfaces/rest-tarifa.interface';
+import { Tarifa } from '../interfaces/tarifa.interface';
 
 export class CarteleraMapper {
   static mapRESTFilmToFilm = (pelicula: RESTPelicula): Pelicula => {
@@ -44,6 +46,20 @@ export class CarteleraMapper {
     return {
       listaFechas:fechas.listaFechas
     }
+  }
+
+  static mapRESTTarifaToTarifa=(tarifa:RESTTarifa):Tarifa=>{
+
+    return{
+      nombre:tarifa.nombre,
+      precio:tarifa.precio
+    }
+
+  }
+
+  static mapRESTarifaArrayToTarifaArray=(tarifas:RESTTarifa[]):Tarifa[]=>{
+
+    return tarifas.map(this.mapRESTTarifaToTarifa);
   }
   // static RESTCountry => country
 
