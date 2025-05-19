@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinematrix.API.Entidades;
 
@@ -9,17 +10,18 @@ public partial class Compra
 
     public int SesionId { get; set; }
 
-    public DateTime Inicio { get; set; }
+    public required DateTime Inicio { get; set; }
 
     public DateTime? Fin { get; set; }
 
-    public string Estado { get; set; } = null!;
+    [Required]
+    public required string Estado { get; set; } = null!;
 
-    public string Autorizacion { get; set; } = null!;
+    public required string Autorizacion { get; set; } = null!;
 
-    public string Canal { get; set; } = null!;
+    public required string Canal { get; set; } = null!;
 
-    public string Medio { get; set; } = null!;
+    public required string Medio { get; set; } = null!;
 
     public decimal? Importe { get; set; }
 
