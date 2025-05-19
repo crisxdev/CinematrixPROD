@@ -7,7 +7,8 @@ import { CarteleraMapper } from '../mappers/cartelera.mapper';
 import { Fechas } from '../interfaces/fechas.interface';
 import { ChildActivationEnd } from '@angular/router';
 import { Tarifa } from '../interfaces/tarifa.interface';
-import { RESTTarifa } from '../interfaces/rest-tarifa.interface';
+import { PostTarifa, RESTTarifa } from '../interfaces/rest-tarifa.interface';
+import { Tarifas } from '../interfaces/tarifas-interface';
 
 const API_URL = 'https://localhost:7243/api/cartelera';
 @Injectable({
@@ -58,11 +59,22 @@ export class CarteleraService {
 
     return this.http.get<RESTTarifa[]>(`${API_URL}/tarifas`).pipe(
        map(CarteleraMapper.mapRESTarifaArrayToTarifaArray),
+       delay(200),
       tap((res)=>console.log('res:',res)),
       catchError((error)=>{
         return throwError(()=>new Error('Error al obtener las tarifas'))
       })
     )
+  }
+
+
+  postSelectedTarifas(tarifasPost:PostTarifa[], sesionId:number){
+    return this.http.post(`${API_URL}/compra/${sesionId}`,tarifasPost).pipe(
+      catchError((error)=>{
+        return throwError(()=>new Error('Error al empezar la compra'))
+      })
+    )
+
   }
 
 

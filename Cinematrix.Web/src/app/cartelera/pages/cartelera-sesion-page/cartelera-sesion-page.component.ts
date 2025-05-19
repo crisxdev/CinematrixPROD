@@ -1,9 +1,21 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CarteleraService } from '../../services/cartelera.service';
-import { CurrencyPipe } from '@angular/common';
-import {Tarifas} from '../../interfaces/tarifas-interface';
+import { CurrencyPipe, NgClass } from '@angular/common';
+import { Tarifas } from '../../interfaces/tarifas-interface';
+import { SeleccionEntradasComponent } from '../../components/seleccion-entradas/seleccion-entradas.component';
+import { Tarifa } from '../../interfaces/tarifa.interface';
+import { CarteleraMapper } from '../../mappers/cartelera.mapper';
+import { PostTarifa } from '../../interfaces/rest-tarifa.interface';
+import { of } from 'rxjs';
 enum TarifasEnum {
   adulto = 'ADULTO',
   familiar = 'FAMILIAR',
@@ -12,7 +24,7 @@ enum TarifasEnum {
 
 @Component({
   selector: 'app-cartelera-sesion-page',
-  imports: [CurrencyPipe],
+  imports: [SeleccionEntradasComponent],
   templateUrl: './cartelera-sesion-page.component.html',
   styleUrl: './cartelera-sesion-page.component.css',
 })
@@ -25,11 +37,11 @@ export class CarteleraSesionPageComponent implements OnInit {
 
   // ])
 
-  tarifas = signal<{ [nombre: string]:Tarifas}>({});
+  tarifas = signal<{ [nombre: string]: Tarifas }>({});
 
-  amount = signal<number>(0);
+  tarifasSelected = signal<PostTarifa[]|undefined>(undefined);
 
-  id = signal<number>(0);
+  id = signal<number | undefined>(undefined);
 
   carteleraResource = rxResource({
     loader: ({ request }) => {
@@ -37,70 +49,57 @@ export class CarteleraSesionPageComponent implements OnInit {
     },
   });
 
-  tarifasArray=computed(()=>{
-    return Object.keys(this.tarifas())
-  })
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((params) => {
       this.id.set(Number(params.get('id')));
-      console.log(this.id());
     });
-
-
-
-
-
   }
 
-  constructor(){
-     effect(() => {
-      if (this.carteleraResource.hasValue()) {
-        const tarifaData = this.carteleraResource.value();
-        const tarifaObj: { [nombre: string]: Tarifas } = {};
+  tarifasResource = rxResource({
+    request: () => ({
+      tarifa: this.tarifasSelected(),
+      id: this.id(),
+    }),
 
-        for (let tarifa of tarifaData) {
-          tarifaObj[tarifa.nombre] = {
-            nombre: tarifa.nombre,
-            precio: tarifa.precio,
-            cantidad: 0,
-          };
-        }
+    loader: ({ request }) => {
+      console.log(request.tarifa, request.id);
+      if ( !request.tarifa || !request.id) return of([]);
 
-        this.tarifas.set(tarifaObj);
+      return this.carteleraService.postSelectedTarifas(
+        request.tarifa,
+        request.id
+      );
+    },
+  });
+
+  constructor() {}
+
+  transformToObject = effect(() => {
+    // Transforma la informacion a un array de objetos {"adulto":{cantidad:0, precio:15}} una vez el servicio tiene valor
+    if (this.carteleraResource.hasValue()) {
+      const tarifaData = this.carteleraResource.value();
+      const tarifaObj: { [nombre: string]: Tarifas } = {};
+
+      for (let tarifa of tarifaData) {
+        tarifaObj[tarifa.nombre] = {
+          nombre: tarifa.nombre,
+          precio: tarifa.precio * 100,
+          cantidad: 0,
+        };
       }
-    });
-  }
 
-  onHandleClickLess(name: string) {
-    const tarifasState ={... this.tarifas()};
-    let precio;
-    let tarifa = {...tarifasState[name]};
-
-    if (tarifa.cantidad > 0) {
-      tarifa.cantidad--;
+      this.tarifas.set(tarifaObj);
     }
-  
-    tarifasState[name]=tarifa
-    this.tarifas.set(tarifasState);
+  });
+
+  sendTarifas(tarifas: { [nombre: string]: Tarifas }) {
+    console.log(tarifas);
+    const tarifasPost =
+      CarteleraMapper.mapTarifasSeleccionadasToRESTTarifasSeleccionadas(
+        tarifas
+      );
+      this.tarifasSelected.set(tarifasPost);
+
+      this.tarifasResource.reload()
   }
-
-  onHandleClickAdd(name: string) {
-     const tarifasState ={... this.tarifas()};
-    let precio;
-    let tarifa = {...tarifasState[name]};
-
-    if (tarifa.cantidad < 9) {
-      tarifa.cantidad++;
-    }
-
-
-    tarifasState[name]=tarifa
-    this.tarifas.set(tarifasState);
-  }
-
-  // this.tarifas.set(tarifasState);
-
-  // if(this.amount()>0){
-  //   this.amount.update((amount)=>amount-1)
-  // }
 }

@@ -5,3 +5,7 @@ export interface RESTTarifa {
 
 }
 
+export interface PostTarifa{
+  nombre:string;
+  cantidad:number;
+}

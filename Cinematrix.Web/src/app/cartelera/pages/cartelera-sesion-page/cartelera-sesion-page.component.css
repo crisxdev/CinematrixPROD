@@ -5,7 +5,7 @@
 
 .info {
   position: relative;
-  background: rgba(234, 229, 229, 0.217);
+  background: rgba(234, 229, 229, 0.17);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 10px;

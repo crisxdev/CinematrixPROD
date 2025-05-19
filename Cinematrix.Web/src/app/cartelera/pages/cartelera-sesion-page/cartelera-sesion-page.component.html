@@ -6,32 +6,55 @@
 </div> -->
 
 <div class="h-screen info flex items-center justify-center pb-[40px]">
-  <div class="w-[500px] h-[400px] flex flex-col">
+  <app-seleccion-entradas
+    (seleccionTarifas)="sendTarifas($event)"
+    [tarifasInput]="tarifas()"
+    [isError]="carteleraResource.error()"
+    [isEmpty]="carteleraResource.value()?.length === 0"
+    [isLoading]="carteleraResource.isLoading()"
+  ></app-seleccion-entradas>
+  <!-- <div class="w-[500px] h-[400px] flex flex-col">
     <div class="w-full mx-auto">
-      <h2 class="text-red-500 text-4xl text-center mb-4">Seleccione sus entradas</h2>
+      <h2 class="text-red-500 text-4xl text-center mb-4">
+        Seleccione sus entradas
+      </h2>
     </div>
     <div class="flex items-center flex-col justify-center text-white">
       @if(carteleraResource.value()){
 
-      <!---->
       @for(tarifa of tarifasArray();track tarifa) {
       <div class="p-5 flex gap-15 items-center">
         <div class="w-20 text-left">
-          <p class="">{{tarifas()[tarifa].nombre}}</p>
+          <p class="">{{ tarifas()[tarifa].nombre }}</p>
         </div>
 
         <div class="w-15">
-          <p class="">{{tarifas()[tarifa].precio |currency:'EUR':'symbol':'1.2-2'}}</p>
+          <p class="">
+            {{
+              getPriceConverted(tarifas()[tarifa].precio)
+                | currency : "EUR" : "symbol" : "1.2-2"
+            }}
+          </p>
         </div>
 
         <div class="rounded-2xl overflow-hidden border-gray-700 border-1 w-25">
           <div class="flex items-center justify-center gap-3">
-            <!-- flex justify-center -->
-            <div class="w-full text-center bg-gray-700 hover:cursor-pointer" (click)="onHandleClickLess(tarifas()[tarifa].nombre)">
-              <button class="text-white text-center pointer-events-none">-</button>
+
+            <div
+              class="w-full text-center bg-gray-700 hover:cursor-pointer"
+              (click)="onHandleClickLess(tarifas()[tarifa].nombre)"
+            >
+              <button class="text-white text-center pointer-events-none">
+                -
+              </button>
             </div>
-            <div class="text-white rounded-2xl mx-[2px]" type="button">{{tarifas()[tarifa].cantidad}}</div>
-            <div class="w-full text-center  bg-gray-700 hover:cursor-pointer" (click)="onHandleClickAdd(tarifas()[tarifa].nombre)">
+            <div class="text-white rounded-2xl mx-[2px]" type="button">
+              {{ tarifas()[tarifa].cantidad }}
+            </div>
+            <div
+              class="w-full text-center bg-gray-700 hover:cursor-pointer"
+              (click)="onHandleClickAdd(tarifas()[tarifa].nombre)"
+            >
               <button class="text-white pointer-events-none">+</button>
             </div>
           </div>
@@ -39,8 +62,32 @@
       </div>
 
       } }
+      <div class="mt-5">
+        <p class="text-2xl">
+          Total:
+          <span>{{
+            getPriceConverted(this.totalPrice())
+              | currency : "EUR" : "symbol" : "1.2-2"
+          }}</span>
+        </p>
+      </div>
+
+      <div class="px-4 mt-5">
+        <button
+          (click)="totalPrice() === 0 ? onHandleClickNext() : ''"
+          [disabled]="totalPrice() === 0"
+          [ngClass]="
+            totalPrice() === 0
+              ? 'opacity-50 cursor-not-allowed'
+              : 'cursor-pointer'
+          "
+          class="px-4 flex items-center justify-center gap-1 py-1 border-2 border-red-600 text-red-600 rounded-full font-semibold tracking-wide hover:bg-red-600 hover:text-white transition-colors duration-500"
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <!-- <div class="h-screen info flex items-center justify-center">
