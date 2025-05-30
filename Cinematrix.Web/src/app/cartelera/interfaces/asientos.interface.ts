@@ -1,5 +1,6 @@
 export interface Asientos {
-  asientos: Asiento[];
+  asientos:Asiento[]
+  idCompra:string;
 }
 
 export interface Asiento {

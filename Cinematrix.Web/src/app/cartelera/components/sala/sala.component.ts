@@ -19,10 +19,15 @@ export class SalaComponent {
   sala = input<Sala | undefined>(undefined);
   salaCopy = signal<string[]>([]);
 
+  cantidadEntradas = input<number>(0);
+
+
+
   @Output() estado = new EventEmitter<number>();
+  @Output() asientosSeleccionadosOutput = new EventEmitter<string[]>();
 
   salaInput = effect(() => {
-    const salaKeys = Object.keys(this.sala() ?? {});
+    const salaKeys = Object.keys(this.sala()?.asientos ?? {});
     this.salaCopy.set(salaKeys);
   });
 
@@ -34,8 +39,11 @@ export class SalaComponent {
   }
 
   devuelveValues(key: string) {
-    const keys = this.sala()?.[key] ?? [];
-    // console.log(keys);
+    console.log(key);
+    console.log(this.sala()?.asientos);
+    // const keys = this.sala()?.[key] ?? [];
+    const keys = this.sala()?.asientos[key] ?? [];
+    console.log(keys);
     let asientos: Asiento[] = [];
 
     for (let asiento of keys) {
@@ -56,15 +64,10 @@ export class SalaComponent {
       });
     }
 
-    // console.log(this.asientos);
-
-    // console.log(asientos);
     return asientos;
-
-    // return this.sala()??[key];
   }
 
-  onSeatClick(asiento: string): boolean {
+  onSeatClick(asiento: string): void {
     const encontarAsiento = this.asientosSelected().filter(
       (el) => el === asiento
     );
@@ -74,16 +77,19 @@ export class SalaComponent {
         (el) => el != asiento
       );
       this.asientosSelected.set(arrQuitarAsiento);
-      return false;
     } else {
+      if (this.asientosSelected().length >= this.cantidadEntradas()) return;
       const copiaArr = [...this.asientosSelected()];
       copiaArr.push(asiento);
       this.asientosSelected.set(copiaArr);
-      return true;
     }
   }
 
   volver() {
-    this.estado.emit(0)
+    this.estado.emit(0);
+  }
+
+  nextStep() {
+    this.asientosSeleccionadosOutput.emit(this.asientosSelected())
   }
 }

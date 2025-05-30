@@ -40,6 +40,8 @@ export class CarteleraSesionPageComponent implements OnInit {
 
   // ])
 
+  cantidadEntradas = signal(0);
+
   tarifas = signal<{ [nombre: string]: Tarifas }>({});
 
   tarifasSelected = signal<PostTarifa[] | undefined>(undefined);
@@ -84,21 +86,8 @@ export class CarteleraSesionPageComponent implements OnInit {
     const value = this.tarifasResource.value();
     if (value) this.estadoProceso.set(1);
   });
-  // salaResource = rxResource({
-  //   request: () => ({
-  //     id: this.id(),
-  //     estado: this.estadoProceso(),
-  //   }),
 
-  //   loader: ({ request }) => {
-  //     if (request.estado != 1 || !request.id) return of({});
-  //     return this.carteleraService.getSala(request.id);
-  //   },
-  // });
-
-  constructor() {
-    console.log('hola');
-  }
+  constructor() {}
 
   transformToObject = effect(() => {
     // Transforma la informacion a un array de objetos {"adulto":{cantidad:0, precio:15}} una vez el servicio tiene valor
@@ -114,8 +103,10 @@ export class CarteleraSesionPageComponent implements OnInit {
           cantidad: 0,
         };
       }
-
+      console.log(this.carteleraService.getTotalTarifas());
+      // this.carteleraService.setTotalTarifas(0);
       this.tarifas.set(tarifaObj);
+
       // this.carteleraService.setCacheTarifas(tarifaObj);
     }
   });
@@ -128,18 +119,29 @@ export class CarteleraSesionPageComponent implements OnInit {
       );
     console.log(tarifasPost);
     this.tarifasSelected.set(tarifasPost);
+    let cantidadEntradas = 0;
 
+    for (let tarifa of this.tarifasSelected() ?? []) {
+      cantidadEntradas += tarifa.cantidad;
+    }
+    console.log(cantidadEntradas);
+    this.cantidadEntradas.set(cantidadEntradas);
     this.tarifasResource.reload();
+    // this.carteleraService.saveToLocalStorage(this.tarifasSelected())
 
     // this.estadoProceso.set(1);
     // this.salaResource.reload()
   }
 
   volverATarifas(estado: number) {
-    const tarifasCache = this.carteleraService.getCacheTarifas();
-    const tarifasCacheCopia = structuredClone(tarifasCache);
-    console.log(tarifasCache);
-    this.tarifas.set(tarifasCacheCopia ?? {});
+    // const tarifasCache = this.carteleraService.getCacheTarifas();
+    // const tarifasCacheCopia = structuredClone(tarifasCache);
+    // console.log(tarifasCache);
+    // this.tarifas.set(tarifasCacheCopia ?? {});
     this.estadoProceso.set(estado);
+  }
+
+  enviarSeleccionFinal($event: string[]) {
+    throw new Error('Method not implemented.');
   }
 }

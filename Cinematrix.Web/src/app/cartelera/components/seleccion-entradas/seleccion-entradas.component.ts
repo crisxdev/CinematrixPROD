@@ -13,11 +13,11 @@ import {
 import { CarteleraService } from '../../services/cartelera.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tarifas } from '../../interfaces/tarifas-interface';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-seleccion-entradas',
-  imports: [CurrencyPipe, NgClass],
+  imports: [CurrencyPipe, NgClass, TitleCasePipe],
   templateUrl: './seleccion-entradas.component.html',
   styleUrl: './seleccion-entradas.component.css',
 })
@@ -25,7 +25,7 @@ export class SeleccionEntradasComponent {
   router = inject(Router);
   carteleraService = inject(CarteleraService);
   activatedRoute = inject(ActivatedRoute);
-  totalPrice = signal(this.carteleraService.getTotalTarifas()??0);
+  totalPrice = signal(0);
   // totalPrice=signal(this.carteleraService.getCacheTarifas()??0)
   tarifasInput = input<{ [nombre: string]: Tarifas }>();
 
@@ -87,12 +87,16 @@ export class SeleccionEntradasComponent {
   }
 
   onHandleClickNext() {
-    this.carteleraService.setCacheTarifas(this.tarifasLocal());
-    this.carteleraService.setTotalTarifas(this.totalPrice())
+    // this.carteleraService.setCacheTarifas(this.tarifasLocal());
+    // this.carteleraService.setTotalTarifas(this.totalPrice())
     this.seleccionTarifas.emit(this.tarifasLocal());
   }
 
   getPriceConverted(price: number): number {
     return price / 100;
+  }
+
+  volver() {
+    this.router.navigate(["/"])
   }
 }

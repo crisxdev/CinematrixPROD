@@ -12,6 +12,8 @@ import { Tarifas } from '../interfaces/tarifas-interface';
 import { Sala } from '../interfaces/rest-sala.interface';
 
 const API_URL = 'https://localhost:7243/api/cartelera';
+
+const loadFromLocalStorage = () => {};
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +21,18 @@ export class CarteleraService {
   private http = inject(HttpClient);
 
   private cacheTarifas: { [nombre: string]: Tarifas } | undefined = undefined;
-  private totalTarifas=signal(0);
+  private totalTarifas = signal(0);
+
+  loadFromLocalStorage() {
+    const seleccionFromLocalStorage = localStorage.getItem('seleccion') ?? '{}';
+    const seleccion = JSON.parse(seleccionFromLocalStorage);
+
+    return seleccion;
+  }
+
+  saveToLocalStorage(seleccionEntradas: any) {
+    localStorage.setItem('seleccion', JSON.stringify(seleccionEntradas));
+  }
 
   setCacheTarifas(tarifas: { [nombre: string]: Tarifas }) {
     this.cacheTarifas = tarifas;
@@ -30,10 +43,10 @@ export class CarteleraService {
   }
 
   setTotalTarifas(total: number) {
-    this.totalTarifas.set(total)
+    this.totalTarifas.set(total);
   }
 
-  getTotalTarifas(){
+  getTotalTarifas() {
     return this.totalTarifas();
   }
 
@@ -89,13 +102,23 @@ export class CarteleraService {
     return this.http
       .post<Sala>(`${API_URL}/compra/${sesionId}`, tarifasPost)
       .pipe(
-        tap((res) => console.log(res)),
+        tap((res) => {
+          let obj = {
+            tarifas: tarifasPost,
+            idCompra: res.compraId,
+          };
+          this.saveToLocalStorage(obj);
+        }),
         catchError((error) => {
           return throwError(() => new Error('Error al empezar la compra'));
         })
       );
   }
 
+
+  postFinalSelection(asientosSeleccionados:string[]){
+
+  }
   // getSala(idSesion: number) {
   //   return this.http.get<Sala>(`${API_URL}/compra/${idSesion}`).pipe(
   //     tap((res) => console.log(res)),

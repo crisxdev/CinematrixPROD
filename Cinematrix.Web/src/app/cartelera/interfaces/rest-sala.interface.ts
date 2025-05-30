@@ -1,9 +1,10 @@
 export interface Sala {
-  [fila: string]: AsientoEstado[];
+  asientos: { [fila: string]: AsientoEstado[] };
+  compraId: string;
 }
 
 export interface AsientoEstado {
   [asientoNumero: string]: EstadoAsiento;
 }
 
-export type EstadoAsiento = "DISPONIBLE" | "OCUPADO" | "NO_DISPONIBLE";
+export type EstadoAsiento = 'DISPONIBLE' | 'OCUPADO' | 'NO_DISPONIBLE';

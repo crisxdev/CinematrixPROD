@@ -18,7 +18,7 @@
   </div>
   }@else if(estadoProceso()==1){
     <div class="h-screen info flex items-center justify-center pb-[100px]">
-    <app-sala [sala]=tarifasResource.value() (estado)="volverATarifas($event)"></app-sala>
+    <app-sala [sala]=tarifasResource.value() [cantidadEntradas]="cantidadEntradas()" (estado)="volverATarifas($event)" (asientosSeleccionadosOutput)="enviarSeleccionFinal($event)"></app-sala>
     </div>
   }
 

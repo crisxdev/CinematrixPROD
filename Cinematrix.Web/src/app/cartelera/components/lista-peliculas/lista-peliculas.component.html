@@ -114,15 +114,19 @@
 
           }@else{
 
-          <div class="flex flex-col items-center">
+          <div class="flex flex-col items-center gap-2">
             <div class="px-[10px]">
               <p
-                class="text-[18px] font-medium m-0 mb-4 text-red-600 cursor-pointer"
+                class="text-[18px] font-medium m-0 mb-1 text-red-600 cursor-pointer"
               >
                 {{ film.titulo }}
               </p>
             </div>
-
+            <!--NUEVO-->
+            <div>
+              <p class="text-white">   {{ dateSelected| date : "EEEE, d 'de' MMMM" }}</p>
+            </div>
+            <!--NUEVO-->
             <div class="w-full flex justify-center">
               <div class="flex gap-2 items-center justify-center flex-wrap">
                 @for (sesion of film.sesiones; track sesion.id) {

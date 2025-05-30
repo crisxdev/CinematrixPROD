@@ -38,7 +38,7 @@ export class ListaPeliculasComponent {
   carteleraService = inject(CarteleraService);
   cantidadFechas = 7;
 
-  dateSelected: Date | null = null;
+  dateSelected: Date | null = new Date();
 
   films = input<Pelicula[]>();
   errorMessage = input<string | unknown | null>();
@@ -50,6 +50,7 @@ export class ListaPeliculasComponent {
 
   carteleraResource = rxResource({
     loader: () => {
+
       return this.carteleraService.getDates(this.cantidadFechas);
     },
   });
@@ -106,7 +107,9 @@ export class ListaPeliculasComponent {
   }
 
   onHandleClickTrailer(trailerURL: string) {
-    console.log(trailerURL);
+
+    // if(!this.hovering()) return
+
     this.isOpenModal.set(true);
     const urlSanitizada =
       this.sanitizer.bypassSecurityTrustResourceUrl(trailerURL);
@@ -114,6 +117,8 @@ export class ListaPeliculasComponent {
   }
 
   onHandleClickSession(id: number) {
+
+    // if(!this.hovering()) return
     this.router.navigate(['cartelera/sesion',id])
   }
 }
