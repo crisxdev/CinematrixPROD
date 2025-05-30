@@ -21,24 +21,24 @@ import { CurrencyPipe, NgClass } from '@angular/common';
   templateUrl: './seleccion-entradas.component.html',
   styleUrl: './seleccion-entradas.component.css',
 })
-export class SeleccionEntradasComponent{
+export class SeleccionEntradasComponent {
   router = inject(Router);
   carteleraService = inject(CarteleraService);
   activatedRoute = inject(ActivatedRoute);
-  totalPrice = signal(0);
+  totalPrice = signal(this.carteleraService.getTotalTarifas()??0);
+  // totalPrice=signal(this.carteleraService.getCacheTarifas()??0)
   tarifasInput = input<{ [nombre: string]: Tarifas }>();
 
   tarifasLocal = signal<{ [nombre: string]: Tarifas }>({});
-  isEmpty = input<boolean|undefined|unknown>();
-  isError = input<boolean|undefined|unknown>();
-  isLoading=input<boolean|undefined|unknown>()
-  @Output() seleccionTarifas = new EventEmitter<{ [nombre: string]: Tarifas }>();
-
+  isEmpty = input<boolean | undefined | unknown>();
+  isError = input<boolean | undefined | unknown>();
+  isLoading = input<boolean | undefined | unknown>();
+  @Output() seleccionTarifas = new EventEmitter<{
+    [nombre: string]: Tarifas;
+  }>();
 
   amount = signal<number>(0);
   id = signal<number>(0);
-
-
 
   inicializarTarifasLocal = effect(() => {
     const tarifas = this.tarifasInput();
@@ -46,10 +46,6 @@ export class SeleccionEntradasComponent{
       this.tarifasLocal.set(structuredClone(this.tarifasInput() ?? {}));
     }
   });
-
-
-
-
 
   tarifasArray = computed(() => {
     return Object.keys(this.tarifasLocal());
@@ -90,8 +86,10 @@ export class SeleccionEntradasComponent{
     console.log(this.totalPrice());
   }
 
-  onHandleClickNext()  {
-    this.seleccionTarifas.emit(this.tarifasLocal())
+  onHandleClickNext() {
+    this.carteleraService.setCacheTarifas(this.tarifasLocal());
+    this.carteleraService.setTotalTarifas(this.totalPrice())
+    this.seleccionTarifas.emit(this.tarifasLocal());
   }
 
   getPriceConverted(price: number): number {

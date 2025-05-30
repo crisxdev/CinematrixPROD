@@ -67,6 +67,7 @@ export class ListaPeliculasComponent {
       if (dates.length > 0 && !this.form.value.fecha) {
         this.form.patchValue({ fecha: dates[0] });
       }
+      console.log(this.films());
     });
   }
 
@@ -93,6 +94,7 @@ export class ListaPeliculasComponent {
 
   onSubmit() {
     const selection = this.form.value.fecha;
+    console.log(selection);
     this.dateSelected = selection;
     const fechaObj = new Date(this.dateSelected ?? '');
     this.dia.emit(fechaObj.toISOString());

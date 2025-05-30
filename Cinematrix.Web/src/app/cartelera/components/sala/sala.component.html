@@ -1,0 +1,61 @@
+<div>
+  <p (click)="volver()"class="text-red-600 cursor-pointer">< Volver</p>
+</div>
+
+<div class="flex flex-col gap-y-2 items-center">
+  <div class="my-6 flex flex-col items-center">
+    <div>
+      <img src="screen.svg" class="w-100" alt="" />
+    </div>
+
+    <div>
+      <p class="text-gray-100 text-2xl">Pantalla</p>
+    </div>
+  </div>
+
+  @for(entrada of devuelveKeys();track entrada){
+
+  <!--ffs-->
+  <div class="flex gap-2">
+    @for(asiento of devuelveValues(entrada);track $index){
+    <div
+      (click)="onSeatClick(asiento.nombre)"
+      class="w-3 md:w-6"
+      [class]="asiento.estado === 'DISPONIBLE' ? 'cursor-pointer' : ''"
+    >
+      <img
+        [src]="
+          asientosSelected().includes(asiento.nombre)
+            ? 'seat_select.svg'
+            : asiento.estado === 'OCUPADO'
+            ? 'seat_sold.svg'
+            : asiento.estado === 'DISPONIBLE'
+            ? 'seat_free.svg'
+            : ''
+        "
+        alt=""
+      />
+    </div>
+    }
+  </div>
+
+  }
+  <div class="flex gap-40">
+    <!-- <div class="px-4 mt-5">
+      <button
+        class="px-4 flex items-center justify-center gap-1 py-1 border-2 border-red-600 text-red-600 rounded-full font-semibold tracking-wide hover:bg-red-600 hover:border-red-600 hover:text-white transition-colors duration-500"
+      >
+        < Volver
+      </button>
+    </div> -->
+
+    <div class="px-4 mt-5">
+      <button
+        class="px-4 flex items-center justify-center gap-1 py-1 border-2 border-red-600 text-red-600 rounded-full font-semibold tracking-wide hover:bg-red-600 hover:text-white transition-colors duration-500"
+        [class]="asientosSelected().length > 0 ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+</div>
