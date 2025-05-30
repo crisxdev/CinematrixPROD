@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Cinematrix.API.Common;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Cinematrix.API.Controllers
 {
@@ -25,13 +27,23 @@ namespace Cinematrix.API.Controllers
 
         public IMapper Mapper { get; }
 
+   
 
+            
         public async Task<ActionResult<CarteleraDTO>> Get([FromQuery] DateTime? dia)
         {
 
             DateTime diaFin;
             DateTime diaIni;
-            diaIni = dia.HasValue ? dia.Value : DateTime.Now;
+            diaIni = dia.HasValue ? new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day) : DateTime.Now;
+            //if (diaIni.Day != DateTime.Now.Day)
+            //{
+            //    if (dia.HasValue)
+            //    {
+            //        diaIni = new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day);
+            //    }
+              
+            //}
             diaFin = diaIni.AddDays(1);
 
             // Busca películas por un día determinado, trae la info de las pelis aunque no tengan sesiones ese día.
@@ -63,6 +75,8 @@ namespace Cinematrix.API.Controllers
 
 
             //Misma consulta pero trae solo las pelis que tienen sesiones ese día
+           
+            System.Diagnostics.Debug.WriteLine(diaIni.ToString("dd/MM/yyyy HH/mm/ss"), diaFin.ToString("dd/MM/yyyy HH/mm/ss"));
 
             var peliculas = await context.Peliculas.Include(x => x.Sesiones).Where(x => x.Sesiones.Any(s => s.Inicio > diaIni && s.Inicio < diaFin))
                 .Select(p => new PeliculaDTO
@@ -89,6 +103,11 @@ namespace Cinematrix.API.Controllers
                )
 
               .ToListAsync();
+
+            foreach(var pelicula in peliculas)
+            {
+                System.Diagnostics.Debug.WriteLine(pelicula.Titulo);
+            }
 
             var peliculasDTO = mapper.Map<List<PeliculaDTO>>(peliculas);
             var resultado = new CarteleraDTO { Peliculas = peliculasDTO };
@@ -151,7 +170,7 @@ namespace Cinematrix.API.Controllers
             decimal total = 0;
             var tarifasResult = await context.Tarifas.Where(t => nombresTarifas.Contains(t.Nombre)).ToListAsync();
 
-
+         
             for (int i = 0; i < creacionCompraDTO.Count; i++)
             {
                 if (tarifasResult[i].Nombre == nombresTarifas[i])
@@ -161,7 +180,54 @@ namespace Cinematrix.API.Controllers
                
 
             }
+       
+            Compra compra = new Compra
+            {
+                Inicio = DateTime.Now,
+                Fin = DateTime.Now.AddMinutes(15),
+                Autorizacion="",
+                Canal = CanalCompra.Online,
+                Estado = EstadoCompra.EnProceso,
+                SesionId = id,
+                Medio = MedioCompra.Paypal,
+                Importe=total
+
+            };
+
+            context.Compras.Add(compra);
+
+            try
+            {
+                await context.SaveChangesAsync();
+                var sala = await context.Sesiones.Where(s => s.Id == id).Select(x =>
+                new
+                {
+                    SalaId=x.Id,
+                    Plano=x.Sala.Plano,
+
+                }
+                ).ToListAsync();
+
+                var ocupacionSala = await context.Ocupaciones.Where(x => x.SesionId == id).ToListAsync();
+
+                if (sala[0].Plano is not null)
+                {
+                    System.Diagnostics.Debug.WriteLine("ENTROOO");
+                    var aforo=TransformaAforo.TransformarAforo(sala[0].Plano, ocupacionSala);
+                    return Ok(aforo);
+                }
+               
+            }catch(Exception ex)
+            {
+                return StatusCode(500, "Ha ocurrido un error en la inicialización de compra");
+            }
+           
+            Console.WriteLine(compra.Id);
+            
+
             return Ok();
+
+          
 
 
         }
