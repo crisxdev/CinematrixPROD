@@ -30,13 +30,13 @@ namespace Cinematrix.API.Common
                             System.Diagnostics.Debug.WriteLine("Ocupadooo",asientoOcupado.Butaca);
                             fila.Add(new Dictionary<string, string>
                             {
-                                {  asiento,"OCUPADO" } 
+                                {  asientoCompleto,"OCUPADO" } 
                                
                             });
                         }
                         else
                         {
-                            var dicAsientoInfo=asiento == "__" ? new Dictionary<string, string> { { asiento, "NO_DISPONIBLE" } } : new Dictionary<string, string> { { asiento, "DISPONIBLE" } };
+                            var dicAsientoInfo=asiento == "__" ? new Dictionary<string, string> { { asiento, "NO_DISPONIBLE" } } : new Dictionary<string, string> { { asientoCompleto, "DISPONIBLE" } };
                             fila.Add(dicAsientoInfo);
 
                         }

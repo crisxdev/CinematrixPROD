@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Cinematrix.API.Common;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Transactions;
 
 namespace Cinematrix.API.Controllers
 {
@@ -214,7 +215,11 @@ namespace Cinematrix.API.Controllers
                 {
                     System.Diagnostics.Debug.WriteLine("ENTROOO");
                     var aforo=TransformaAforo.TransformarAforo(sala[0].Plano, ocupacionSala);
-                    return Ok(aforo);
+                    return Ok(new
+                    {
+                        asientos=aforo,
+                        compraId=compra.Id
+                    });
                 }
                
             }catch(Exception ex)
@@ -229,6 +234,61 @@ namespace Cinematrix.API.Controllers
 
           
 
+
+        }
+
+
+        [HttpPost("compra/intermedio/{idCompra:int}")]
+
+        public async Task<ActionResult> PostFinalCompra(int idCompra, [FromBody] CompraIntermediaDTO compraIntermediaDTO)
+        {
+            var compra = await context.Compras.FirstOrDefaultAsync(x => x.Id == idCompra);
+            if (compra is null)
+            {
+                return BadRequest("La compra no existe");
+            }
+
+            var asientosSeleccionados = compraIntermediaDTO.AsientosSeleccionados;
+            var tarifasSeleccionadas = compraIntermediaDTO.Tarifas;
+
+            List<Ocupacion> ocupaciones = [];
+            var OcupacionesYaExisten = await context.Ocupaciones.Where(t =>asientosSeleccionados.Contains(t.Butaca)).ToListAsync();
+            if (OcupacionesYaExisten.Count > 0)
+            {
+                return BadRequest("Alguno de los asientos está reservado.");
+            }
+
+            int indexAsiento = 0;
+            using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                foreach (var tarifa in tarifasSeleccionadas)
+                {
+                    for (int i = 0; i < tarifa.Cantidad; i++)
+                    {
+                        ocupaciones.Add(new Ocupacion
+                        {
+                            CompraId = idCompra,
+                            SesionId = compra.SesionId,
+                            Butaca = asientosSeleccionados[indexAsiento],
+                            Estado = EstadoButaca.Reservada,
+                            TarifaNombre = tarifa.Nombre
+
+                        });
+                        indexAsiento++;
+                    }
+                }
+                context.Ocupaciones.AddRange(ocupaciones);
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+            }catch(Exception e)
+            {
+                await transaction.RollbackAsync(); // Si ha habido algún error en la reserva o en el proceso, revierte los cambios.
+                return StatusCode(500, e.Message);
+            }
+
+            return Ok();
 
         }
     }
