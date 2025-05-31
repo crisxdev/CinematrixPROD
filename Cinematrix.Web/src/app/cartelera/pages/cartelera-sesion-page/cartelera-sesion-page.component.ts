@@ -46,6 +46,8 @@ export class CarteleraSesionPageComponent implements OnInit {
 
   tarifasSelected = signal<PostTarifa[] | undefined>(undefined);
 
+  asientosSelected = signal<string[] | undefined>(undefined);
+
   id = signal<number | undefined>(undefined);
 
   estadoProceso = signal<number>(0);
@@ -141,7 +143,26 @@ export class CarteleraSesionPageComponent implements OnInit {
     this.estadoProceso.set(estado);
   }
 
-  enviarSeleccionFinal($event: string[]) {
-    throw new Error('Method not implemented.');
+  ocupacionResource = rxResource({
+    request: () => ({
+      asientos: this.asientosSelected(),
+    }),
+
+    loader: ({ request }) => {
+      // console.log(request.tarifa, request.id);
+      if (!request.asientos) {
+        return of(undefined);
+      }
+
+      return this.carteleraService.postFinalSelection(request.asientos);
+    },
+  });
+
+  enviarSeleccionFinal(asientosSelected: string[]) {
+    console.log(asientosSelected);
+    this.estadoProceso.set(2);
+    this.asientosSelected.set(asientosSelected);
+    this.ocupacionResource.reload()
+
   }
 }

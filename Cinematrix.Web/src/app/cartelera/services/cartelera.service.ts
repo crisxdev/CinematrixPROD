@@ -10,6 +10,7 @@ import { Tarifa } from '../interfaces/tarifa.interface';
 import { PostTarifa, RESTTarifa } from '../interfaces/rest-tarifa.interface';
 import { Tarifas } from '../interfaces/tarifas-interface';
 import { Sala } from '../interfaces/rest-sala.interface';
+import { LocalStorage } from '../interfaces/local-storage.interface';
 
 const API_URL = 'https://localhost:7243/api/cartelera';
 
@@ -23,7 +24,7 @@ export class CarteleraService {
   private cacheTarifas: { [nombre: string]: Tarifas } | undefined = undefined;
   private totalTarifas = signal(0);
 
-  loadFromLocalStorage() {
+  loadFromLocalStorage(): LocalStorage {
     const seleccionFromLocalStorage = localStorage.getItem('seleccion') ?? '{}';
     const seleccion = JSON.parse(seleccionFromLocalStorage);
 
@@ -115,9 +116,34 @@ export class CarteleraService {
       );
   }
 
-
-  postFinalSelection(asientosSeleccionados:string[]){
-
+  postFinalSelection(asientosSeleccionados: string[]) {
+    const infoLocal = this.loadFromLocalStorage();
+    console.log({
+      tarifas: infoLocal.tarifas,
+      idCompra: infoLocal.idCompra,
+      asientosSeleccionados: asientosSeleccionados,
+    });
+    console.log(`${API_URL}/compra/intermedio/${infoLocal.idCompra}`);
+    return this.http
+      .post(`${API_URL}/compra/intermedio/${infoLocal.idCompra}`, {
+        tarifas: infoLocal.tarifas,
+        idCompra: infoLocal.idCompra,
+        asientosSeleccionados: asientosSeleccionados,
+      })
+      .pipe(
+        tap((res) => {
+          console.log(res);
+          this.saveToLocalStorage({
+            tarifas: infoLocal.tarifas,
+            idCompra: infoLocal.idCompra,
+            asientosSeleccionados: asientosSeleccionados,
+          });
+        }),
+        catchError((error) => {
+          console.log(error);
+          return throwError(() => new Error('Error de reserva'));
+        })
+      );
   }
   // getSala(idSesion: number) {
   //   return this.http.get<Sala>(`${API_URL}/compra/${idSesion}`).pipe(

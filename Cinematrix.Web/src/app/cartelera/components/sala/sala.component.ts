@@ -39,11 +39,11 @@ export class SalaComponent {
   }
 
   devuelveValues(key: string) {
-    console.log(key);
-    console.log(this.sala()?.asientos);
+    // console.log(key);
+    // console.log(this.sala()?.asientos);
     // const keys = this.sala()?.[key] ?? [];
     const keys = this.sala()?.asientos[key] ?? [];
-    console.log(keys);
+    // console.log(keys);
     let asientos: Asiento[] = [];
 
     for (let asiento of keys) {
