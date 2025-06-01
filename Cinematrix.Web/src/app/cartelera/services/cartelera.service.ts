@@ -118,6 +118,9 @@ export class CarteleraService {
                 ...storage,
                 tarifas: tarifasPost,
                 idCompra: res.compraId,
+
+
+
               };
               console.log(obj);
               this.saveToLocalStorage(obj);
@@ -137,6 +140,7 @@ export class CarteleraService {
           let obj = {
             tarifas: tarifasPost,
             idCompra: res.compraId,
+            estado:1
           };
           this.saveToLocalStorage(obj);
         }),
@@ -167,6 +171,7 @@ export class CarteleraService {
             tarifas: infoLocal.tarifas,
             idCompra: infoLocal.idCompra,
             asientosSeleccionados: asientosSeleccionados,
+            estado:2
           });
         }),
         catchError((error) => {

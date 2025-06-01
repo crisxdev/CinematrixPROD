@@ -27,6 +27,8 @@ export class SalaComponent implements OnChanges {
   sala = input<Sala | undefined>(undefined);
   salaCopy = signal<string[]>([]);
 
+  errorMessage = input<string | unknown | null>();
+
   cantidadEntradas = input<number>(0);
   carteleraService = inject(CarteleraService);
   ngOnChanges(changes: SimpleChanges) {

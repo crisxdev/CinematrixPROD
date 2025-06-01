@@ -54,6 +54,7 @@ export class CarteleraSesionPageComponent implements OnInit {
 
   id = signal<number | undefined>(undefined);
 
+
   estadoProceso = signal<number>(0);
 
   carteleraResource = rxResource({
@@ -66,6 +67,101 @@ export class CarteleraSesionPageComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((params) => {
       this.id.set(Number(params.get('id')));
     });
+    // const nav = performance.getEntriesByType(
+    //   'navigation'
+    // )[0] as PerformanceNavigationTiming;
+    // const fueRecarga = nav?.type === 'reload';
+
+    // if(fueRecarga){
+
+    // }
+    const infoLocal = this.carteleraService.loadFromLocalStorage();
+
+    if (infoLocal.estado) {
+      if (infoLocal.estado == 1) {
+        if (infoLocal.tarifas && infoLocal.idCompra) {
+          this.asientosSelected.set(
+            structuredClone(infoLocal.asientosSeleccionados)
+          );
+          console.log(this.asientosSelected());
+          this.tarifasSelected.set(infoLocal.tarifas);
+          console.log(infoLocal.asientosSeleccionados);
+          let cantidadEntradas = 0;
+
+          for (let tarifa of this.tarifasSelected() ?? []) {
+            cantidadEntradas += tarifa.cantidad;
+          }
+          this.cantidadEntradas.set(cantidadEntradas);
+          this.estadoProceso.set(1);
+          this.existeCompra.set(true);
+          this.ocupacionResource.reload();
+        }
+      } else {
+        if (infoLocal.estado == 2) {
+          if (
+            infoLocal.asientosSeleccionados &&
+            infoLocal.idCompra &&
+            infoLocal.tarifas
+          ) {
+            this.asientosSelected.set(
+              structuredClone(infoLocal.asientosSeleccionados)
+            );
+            console.log(this.asientosSelected());
+            this.existeCompra.set(true);
+            this.estadoProceso.set(2);
+            this.tarifasSelected.set(infoLocal.tarifas);
+
+            let cantidadEntradas = 0;
+
+            for (let tarifa of this.tarifasSelected() ?? []) {
+              cantidadEntradas += tarifa.cantidad;
+            }
+            this.cantidadEntradas.set(cantidadEntradas);
+
+            // this.ocupacionResource.reload();
+
+          }
+        }
+      }
+      // this.asientosSelected.set(
+      //   structuredClone(infoLocal.asientosSeleccionados)
+      // );
+
+      // this.tarifasSelected.set(infoLocal.tarifas);
+      // console.log(infoLocal.asientosSeleccionados);
+      // let cantidadEntradas = 0;
+
+      // for (let tarifa of this.tarifasSelected() ?? []) {
+      //   cantidadEntradas += tarifa.cantidad;
+      // }
+      // this.cantidadEntradas.set(cantidadEntradas);
+      // this.estadoProceso.set(2);
+      // this.existeCompra.set(true);
+      // this.ocupacionResource.reload();
+    }
+    // if (
+    //   infoLocal.asientosSeleccionados &&
+    //   infoLocal.idCompra &&
+    //   infoLocal.tarifas &&
+    //   infoLocal.estado
+    // ) {
+
+    //     this.asientosSelected.set(
+    //       structuredClone(infoLocal.asientosSeleccionados)
+    //     );
+
+    //     this.tarifasSelected.set(infoLocal.tarifas);
+    //     console.log(infoLocal.asientosSeleccionados);
+    //     let cantidadEntradas = 0;
+
+    //     for (let tarifa of this.tarifasSelected() ?? []) {
+    //       cantidadEntradas += tarifa.cantidad;
+    //     }
+    //     this.cantidadEntradas.set(cantidadEntradas);
+    //     this.estadoProceso.set(2);
+    //     this.existeCompra.set(true);
+    //     this.ocupacionResource.reload();
+    //   }
   }
 
   tarifasResource = rxResource({
@@ -80,6 +176,7 @@ export class CarteleraSesionPageComponent implements OnInit {
       console.log('Holaa');
       if (!request.tarifa || !request.id) {
         this.estadoProceso.set(0);
+
         return of(undefined);
       }
 
@@ -90,8 +187,11 @@ export class CarteleraSesionPageComponent implements OnInit {
   });
 
   resultadoTarifas = effect(() => {
+    
     const value = this.tarifasResource.value();
-    if (value) this.estadoProceso.set(1);
+    if (value) {
+      this.estadoProceso.set(1)};
+
   });
 
   constructor() {
@@ -119,13 +219,18 @@ export class CarteleraSesionPageComponent implements OnInit {
     window.addEventListener('beforeunload', () => {
       const seleccionFromLocalStorage =
         this.carteleraService.loadFromLocalStorage();
+      const nav = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
       if (seleccionFromLocalStorage.idCompra) {
-        if (this.estadoProceso() !== 3) {
-          navigator.sendBeacon(
-            `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
-          );
+        if (nav?.type !== 'reload') {
+          if (this.estadoProceso() !== 3) {
+            navigator.sendBeacon(
+              `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
+            );
+          }
+          localStorage.removeItem('seleccion');
         }
-        localStorage.removeItem('seleccion');
       }
     });
   }
@@ -180,9 +285,15 @@ export class CarteleraSesionPageComponent implements OnInit {
     // const tarifasCacheCopia = structuredClone(tarifasCache);
     // console.log(tarifasCache);
     // this.tarifas.set(tarifasCacheCopia ?? {});
+    const infoLocal = this.carteleraService.loadFromLocalStorage();
+    if (infoLocal) {
+      infoLocal.estado = 0;
+    }
+    this.carteleraService.saveToLocalStorage(infoLocal);
+    // localStorage.setItem('seleccion',)
     this.cancelarCompra.set(true);
     this.cancelarResource.reload();
-    this.estadoProceso.set(estado);
+    this.estadoProceso.set(0);
     // this.cancelarCompra.set(undefined)
     // this.cancelarCompra.set(false)
   }
@@ -221,6 +332,11 @@ export class CarteleraSesionPageComponent implements OnInit {
   }
 
   volverASala(estado: number) {
+    const infoLocal = this.carteleraService.loadFromLocalStorage();
+    if (infoLocal) {
+      infoLocal.estado = 1;
+    }
+    this.carteleraService.saveToLocalStorage(infoLocal);
     this.estadoProceso.set(estado);
     this.existeCompra.set(true);
     this.tarifasResource.reload();

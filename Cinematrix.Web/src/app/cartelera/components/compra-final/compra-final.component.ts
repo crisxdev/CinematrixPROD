@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-compra-final',
@@ -7,11 +7,9 @@ import { Component, EventEmitter, Output, signal } from '@angular/core';
   styleUrl: './compra-final.component.css',
 })
 export class CompraFinalComponent {
-
- @Output() estado = new EventEmitter<number>();
-
- volver() {
+  @Output() estado = new EventEmitter<number>();
+  errorMessage = input<string | unknown | null>();
+  volver() {
     this.estado.emit(1);
   }
 }
-

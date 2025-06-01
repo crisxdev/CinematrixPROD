@@ -19,6 +19,7 @@
 <div class="h-screen info flex items-center justify-center pb-[100px]">
   <app-sala
     [sala]="tarifasResource.value()"
+    [errorMessage]="tarifasResource.error()"
     [cantidadEntradas]="cantidadEntradas()"
     (estado)="volverATarifas($event)"
     (asientosSeleccionadosOutput)="enviarSeleccionFinal($event)"
@@ -26,7 +27,7 @@
 </div>
 }@else if(estadoProceso()==2){
 <div class="h-screen info flex items-center justify-center pb-[100px]">
-  <app-compra-final (estado)="volverASala($event)"></app-compra-final>
+  <app-compra-final (estado)="volverASala($event)" [errorMessage]="ocupacionResource.error()"></app-compra-final>
 </div>
 }
 

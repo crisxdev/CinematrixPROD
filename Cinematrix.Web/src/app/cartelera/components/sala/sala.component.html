@@ -1,3 +1,8 @@
+
+
+
+
+
 <div>
   <p
     (click)="volver()"
@@ -6,6 +11,11 @@
     < Volver
   </p>
 </div>
+
+@if(errorMessage()){
+  <p>Ha ocurrido algún ::(</p>
+}
+
 
 <div class="flex flex-col gap-y-1 md:gap-y-2 items-center">
   <div class="my-6 flex flex-col items-center w-full">
