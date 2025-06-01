@@ -1,4 +1,5 @@
 using Cinematrix.API.Datos;
+using Cinematrix.API.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -25,7 +26,7 @@ builder.Services.AddControllers().AddJsonOptions(opciones => opciones.JsonSerial
 
 builder.Services.AddDbContext<CinematrixContext>(opciones => opciones.UseSqlServer("name=DefaultConnection"));
 
-
+builder.Services.AddHostedService<ReservaCleanupService>();
 
 //Fin del área del servicios
 

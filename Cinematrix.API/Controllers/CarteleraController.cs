@@ -9,6 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Cinematrix.API.Common;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Transactions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Cinematrix.API.Controllers
 {
@@ -28,22 +29,23 @@ namespace Cinematrix.API.Controllers
 
         public IMapper Mapper { get; }
 
-   
 
-            
+
+
         public async Task<ActionResult<CarteleraDTO>> Get([FromQuery] DateTime? dia)
         {
 
+
             DateTime diaFin;
             DateTime diaIni;
-            diaIni = dia.HasValue ? new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day) : DateTime.Now;
+            diaIni = dia.HasValue ? new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day) : DateTime.Now.Date;
             //if (diaIni.Day != DateTime.Now.Day)
             //{
             //    if (dia.HasValue)
             //    {
             //        diaIni = new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day);
             //    }
-              
+
             //}
             diaFin = diaIni.AddDays(1);
 
@@ -76,7 +78,7 @@ namespace Cinematrix.API.Controllers
 
 
             //Misma consulta pero trae solo las pelis que tienen sesiones ese día
-           
+
             System.Diagnostics.Debug.WriteLine(diaIni.ToString("dd/MM/yyyy HH/mm/ss"), diaFin.ToString("dd/MM/yyyy HH/mm/ss"));
 
             var peliculas = await context.Peliculas.Include(x => x.Sesiones).Where(x => x.Sesiones.Any(s => s.Inicio > diaIni && s.Inicio < diaFin))
@@ -105,7 +107,7 @@ namespace Cinematrix.API.Controllers
 
               .ToListAsync();
 
-            foreach(var pelicula in peliculas)
+            foreach (var pelicula in peliculas)
             {
                 System.Diagnostics.Debug.WriteLine(pelicula.Titulo);
             }
@@ -159,7 +161,7 @@ namespace Cinematrix.API.Controllers
         }
 
         [HttpPost("compra/{id:int}")]
-        public async Task<ActionResult> PostInicioCompra(int id, [FromBody] List<CreacionCompraDTO> creacionCompraDTO)
+        public async Task<ActionResult> PostInicioCompra(int id, [FromBody] List<CreacionCompraDTO> creacionCompraDTO, [FromQuery] int? idCompra )
         {
 
 
@@ -171,40 +173,50 @@ namespace Cinematrix.API.Controllers
             decimal total = 0;
             var tarifasResult = await context.Tarifas.Where(t => nombresTarifas.Contains(t.Nombre)).ToListAsync();
 
-         
+
             for (int i = 0; i < creacionCompraDTO.Count; i++)
             {
                 if (tarifasResult[i].Nombre == nombresTarifas[i])
                 {
                     total += tarifasResult[i].Precio ?? 0 * creacionCompraDTO[i].Cantidad;
                 }
-               
+
 
             }
-       
+
             Compra compra = new Compra
             {
                 Inicio = DateTime.Now,
                 Fin = DateTime.Now.AddMinutes(15),
-                Autorizacion="",
+                Autorizacion = "",
                 Canal = CanalCompra.Online,
                 Estado = EstadoCompra.EnProceso,
                 SesionId = id,
                 Medio = MedioCompra.Paypal,
-                Importe=total
+                Importe = total
 
             };
 
-            context.Compras.Add(compra);
+       
 
             try
             {
-                await context.SaveChangesAsync();
+
+                //NUEVO
+                if(idCompra is null)
+                {
+                    System.Diagnostics.Debug.WriteLine("no existe id compra" + idCompra);
+                    context.Compras.Add(compra);
+                    await context.SaveChangesAsync();
+                }
+                
+              
+                
                 var sala = await context.Sesiones.Where(s => s.Id == id).Select(x =>
                 new
                 {
-                    SalaId=x.Id,
-                    Plano=x.Sala.Plano,
+                    SalaId = x.Id,
+                    Plano = x.Sala.Plano,
 
                 }
                 ).ToListAsync();
@@ -214,25 +226,27 @@ namespace Cinematrix.API.Controllers
                 if (sala[0].Plano is not null)
                 {
                     System.Diagnostics.Debug.WriteLine("ENTROOO");
-                    var aforo=TransformaAforo.TransformarAforo(sala[0].Plano, ocupacionSala);
+                    var aforo = TransformaAforo.TransformarAforo(sala[0].Plano, ocupacionSala);
+
+                    //Nuevo
                     return Ok(new
                     {
-                        asientos=aforo,
-                        compraId=compra.Id
+                        asientos = aforo,
+                        compraId = idCompra??compra.Id
                     });
                 }
-               
-            }catch(Exception ex)
+
+            } catch (Exception ex)
             {
                 return StatusCode(500, "Ha ocurrido un error en la inicialización de compra");
             }
-           
+
             Console.WriteLine(compra.Id);
-            
+
 
             return Ok();
 
-          
+
 
 
         }
@@ -252,16 +266,19 @@ namespace Cinematrix.API.Controllers
             var tarifasSeleccionadas = compraIntermediaDTO.Tarifas;
 
             List<Ocupacion> ocupaciones = [];
-            var OcupacionesYaExisten = await context.Ocupaciones.Where(t =>asientosSeleccionados.Contains(t.Butaca)).ToListAsync();
-            if (OcupacionesYaExisten.Count > 0)
-            {
-                return BadRequest("Alguno de los asientos está reservado.");
-            }
+            //var OcupacionesYaExisten = await context.Ocupaciones.Where(t => asientosSeleccionados.Contains(t.Butaca)).ToListAsync();
+            //if (OcupacionesYaExisten.Count > 0)
+            //{
+            //    return BadRequest("Alguno de los asientos está reservado.");
+            //}
 
             int indexAsiento = 0;
             using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
+                var ocupacionesExistentesCompra = await context.Ocupaciones.Where(o => o.CompraId == idCompra).ToListAsync();
+                if (ocupacionesExistentesCompra.Count > 0) context.Ocupaciones.RemoveRange(ocupacionesExistentesCompra);
+                await context.SaveChangesAsync();
                 foreach (var tarifa in tarifasSeleccionadas)
                 {
                     for (int i = 0; i < tarifa.Cantidad; i++)
@@ -278,11 +295,20 @@ namespace Cinematrix.API.Controllers
                         indexAsiento++;
                     }
                 }
+               
+                //NUEVO
+                var OcupacionesYaExisten = await context.Ocupaciones.Where(t => asientosSeleccionados.Contains(t.Butaca) && t.SesionId==compra.SesionId).ToListAsync();
+                if (OcupacionesYaExisten.Any())
+                {
+                    System.Diagnostics.Debug.WriteLine("Ya existen");
+                    return BadRequest("Alguno de los asientos está reservado.");
+                }
                 context.Ocupaciones.AddRange(ocupaciones);
+
                 await context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-            }catch(Exception e)
+            } catch (Exception e)
             {
                 await transaction.RollbackAsync(); // Si ha habido algún error en la reserva o en el proceso, revierte los cambios.
                 return StatusCode(500, e.Message);
@@ -291,5 +317,43 @@ namespace Cinematrix.API.Controllers
             return Ok();
 
         }
+
+
+        [HttpPost("compra/cancelar/{idCompra:int}")]
+        public async Task<ActionResult> CancelarCompra(int idCompra) {
+
+            System.Diagnostics.Debug.WriteLine("cANCELANDOOO"+idCompra);
+            var compra = await context.Compras.FirstOrDefaultAsync(c => c.Id == idCompra);
+            System.Diagnostics.Debug.WriteLine(compra.Id + "no es null");
+            if (compra is null)
+            {
+                
+                return BadRequest($"No existe una compra con {idCompra}");
+            }
+
+            if(compra.Estado==EstadoCompra.EnProceso || compra.Estado==EstadoCompra.Cancelada)
+            {
+                compra.Estado = EstadoCompra.Cancelada;
+            }
+            else
+            {
+                return BadRequest($"No se puede cancelar la compra {idCompra}");
+            }
+
+
+                var ocupaciones = await context.Ocupaciones.Where(o => o.CompraId == compra.Id).ToListAsync();
+
+            if (ocupaciones.Count > 0)
+            {
+                context.Ocupaciones.RemoveRange(ocupaciones);
+                
+            }
+            await context.SaveChangesAsync();
+
+
+            return Ok(idCompra);
+        }
+
     }
+    
 }

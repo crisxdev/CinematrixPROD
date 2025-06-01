@@ -18,7 +18,7 @@ namespace Cinematrix.API.Common
                 {
                     fila = new List<Dictionary<string, string>>();
                     
-                    System.Diagnostics.Debug.WriteLine(aforoItem.Key);
+                    //System.Diagnostics.Debug.WriteLine(aforoItem.Key);
 
                     foreach(var asiento in aforoItem.Value)
                     {
@@ -27,7 +27,7 @@ namespace Cinematrix.API.Common
                         var asientoOcupado = ocupacion.FirstOrDefault(x => x.Butaca == asientoCompleto);
                         if(asientoOcupado is not null)
                         {
-                            System.Diagnostics.Debug.WriteLine("Ocupadooo",asientoOcupado.Butaca);
+                            //System.Diagnostics.Debug.WriteLine("Ocupadooo",asientoOcupado.Butaca);
                             fila.Add(new Dictionary<string, string>
                             {
                                 {  asientoCompleto,"OCUPADO" } 
