@@ -6,7 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CarteleraService } from '../../services/cartelera.service';
 import { CurrencyPipe, NgClass } from '@angular/common';
@@ -15,9 +15,11 @@ import { SeleccionEntradasComponent } from '../../components/seleccion-entradas/
 import { Tarifa } from '../../interfaces/tarifa.interface';
 import { CarteleraMapper } from '../../mappers/cartelera.mapper';
 import { PostTarifa } from '../../interfaces/rest-tarifa.interface';
-import { of } from 'rxjs';
+import { filter, map, of } from 'rxjs';
 import { Sala } from '../../interfaces/rest-sala.interface';
 import { SalaComponent } from '../../components/sala/sala.component';
+import { CompraFinalComponent } from '../../components/compra-final/compra-final.component';
+import { LocalStorage } from '../../interfaces/local-storage.interface';
 enum TarifasEnum {
   adulto = 'ADULTO',
   familiar = 'FAMILIAR',
@@ -26,7 +28,7 @@ enum TarifasEnum {
 
 @Component({
   selector: 'app-cartelera-sesion-page',
-  imports: [SeleccionEntradasComponent, SalaComponent],
+  imports: [SeleccionEntradasComponent, SalaComponent, CompraFinalComponent],
   templateUrl: './cartelera-sesion-page.component.html',
   styleUrl: './cartelera-sesion-page.component.css',
 })
@@ -40,9 +42,11 @@ export class CarteleraSesionPageComponent implements OnInit {
 
   // ])
 
+  cancelarCompra = signal<undefined | boolean>(undefined);
   cantidadEntradas = signal(0);
 
   tarifas = signal<{ [nombre: string]: Tarifas }>({});
+  existeCompra = signal<boolean>(false);
 
   tarifasSelected = signal<PostTarifa[] | undefined>(undefined);
 
@@ -68,19 +72,20 @@ export class CarteleraSesionPageComponent implements OnInit {
     request: () => ({
       tarifa: this.tarifasSelected(),
       id: this.id(),
+      existeCompra: this.existeCompra(),
     }),
 
     loader: ({ request }) => {
       console.log(request.tarifa, request.id);
+      console.log('Holaa');
       if (!request.tarifa || !request.id) {
         this.estadoProceso.set(0);
         return of(undefined);
       }
 
-      return this.carteleraService.postSelectedTarifas(
-        request.tarifa,
-        request.id
-      );
+      return this.carteleraService
+        .postSelectedTarifas(request.tarifa, request.id, this.existeCompra())
+        .pipe(map((sala) => structuredClone(sala)));
     },
   });
 
@@ -89,7 +94,41 @@ export class CarteleraSesionPageComponent implements OnInit {
     if (value) this.estadoProceso.set(1);
   });
 
-  constructor() {}
+  constructor() {
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationStart => event instanceof NavigationStart
+        )
+      )
+      .subscribe((event) => {
+        const urlDestino = event.url;
+
+        if (!urlDestino.includes('cartelera/sesion')) {
+          const seleccionFromLocalStorage =
+            this.carteleraService.loadFromLocalStorage();
+          if (this.estadoProceso() !== 3 && seleccionFromLocalStorage) {
+            navigator.sendBeacon(
+              `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
+            );
+          }
+          localStorage.removeItem('seleccion');
+        }
+      });
+
+    window.addEventListener('beforeunload', () => {
+      const seleccionFromLocalStorage =
+        this.carteleraService.loadFromLocalStorage();
+      if (seleccionFromLocalStorage.idCompra) {
+        if (this.estadoProceso() !== 3) {
+          navigator.sendBeacon(
+            `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
+          );
+        }
+        localStorage.removeItem('seleccion');
+      }
+    });
+  }
 
   transformToObject = effect(() => {
     // Transforma la informacion a un array de objetos {"adulto":{cantidad:0, precio:15}} una vez el servicio tiene valor
@@ -120,7 +159,8 @@ export class CarteleraSesionPageComponent implements OnInit {
         tarifas
       );
     console.log(tarifasPost);
-    this.tarifasSelected.set(tarifasPost);
+    this.tarifasSelected.set(structuredClone(tarifasPost));
+    this.existeCompra.set(false);
     let cantidadEntradas = 0;
 
     for (let tarifa of this.tarifasSelected() ?? []) {
@@ -140,7 +180,11 @@ export class CarteleraSesionPageComponent implements OnInit {
     // const tarifasCacheCopia = structuredClone(tarifasCache);
     // console.log(tarifasCache);
     // this.tarifas.set(tarifasCacheCopia ?? {});
+    this.cancelarCompra.set(true);
+    this.cancelarResource.reload();
     this.estadoProceso.set(estado);
+    // this.cancelarCompra.set(undefined)
+    // this.cancelarCompra.set(false)
   }
 
   ocupacionResource = rxResource({
@@ -149,7 +193,7 @@ export class CarteleraSesionPageComponent implements OnInit {
     }),
 
     loader: ({ request }) => {
-      // console.log(request.tarifa, request.id);
+      //  console.log(request.tarifa, request.id);
       if (!request.asientos) {
         return of(undefined);
       }
@@ -158,11 +202,27 @@ export class CarteleraSesionPageComponent implements OnInit {
     },
   });
 
+  cancelarResource = rxResource({
+    request: () => ({
+      cancelar: this.cancelarCompra(),
+    }),
+
+    loader: ({ request }) => {
+      if (!request.cancelar) return of();
+      return this.carteleraService.cancelarCompra();
+    },
+  });
+
   enviarSeleccionFinal(asientosSelected: string[]) {
     console.log(asientosSelected);
     this.estadoProceso.set(2);
     this.asientosSelected.set(asientosSelected);
-    this.ocupacionResource.reload()
+    this.ocupacionResource.reload();
+  }
 
+  volverASala(estado: number) {
+    this.estadoProceso.set(estado);
+    this.existeCompra.set(true);
+    this.tarifasResource.reload();
   }
 }

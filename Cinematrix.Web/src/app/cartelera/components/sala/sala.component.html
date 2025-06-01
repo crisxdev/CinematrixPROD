@@ -27,11 +27,11 @@
     </div>
     @for(asiento of devuelveValues(entrada);track $index){
     <div
-      (click)="onSeatClick(asiento.nombre)"
+      (click)="onSeatClick(asiento.nombre,asiento.estado)"
       class="w-[17px] md:w-6"
-      [class]="asiento.estado === 'DISPONIBLE' ? 'cursor-pointer' : ''"
+      [class]="asiento.estado === 'DISPONIBLE' ? 'cursor-pointer' :  asientosSelected().includes(asiento.nombre)?'cursor-pointer':''"
     >
-    
+
       <img
         [src]="
           asientosSelected().includes(asiento.nombre)

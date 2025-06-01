@@ -99,11 +99,41 @@ export class CarteleraService {
     );
   }
 
-  postSelectedTarifas(tarifasPost: PostTarifa[], sesionId: number) {
+  postSelectedTarifas(
+    tarifasPost: PostTarifa[],
+    sesionId: number,
+    existeCompra: boolean
+  ) {
+    if (existeCompra) {
+      const storage = this.loadFromLocalStorage();
+      if (storage.idCompra) {
+        return this.http
+          .post<Sala>(
+            `${API_URL}/compra/${sesionId}?idCompra=${storage.idCompra}`,
+            tarifasPost
+          )
+          .pipe(
+            tap((res) => {
+              let obj = {
+                ...storage,
+                tarifas: tarifasPost,
+                idCompra: res.compraId,
+              };
+              console.log(obj);
+              this.saveToLocalStorage(obj);
+            }),
+            catchError((error) => {
+              return throwError(() => new Error('Error al empezar la compra'));
+            })
+          );
+      }
+    }
+
     return this.http
       .post<Sala>(`${API_URL}/compra/${sesionId}`, tarifasPost)
       .pipe(
         tap((res) => {
+          console.log(res);
           let obj = {
             tarifas: tarifasPost,
             idCompra: res.compraId,
@@ -142,6 +172,20 @@ export class CarteleraService {
         catchError((error) => {
           console.log(error);
           return throwError(() => new Error('Error de reserva'));
+        })
+      );
+  }
+
+  cancelarCompra() {
+    const infoLocal = this.loadFromLocalStorage();
+    return this.http
+      .post(`${API_URL}/compra/cancelar/${infoLocal.idCompra}`, {})
+      .pipe(
+        tap((res) => {
+          console.log(res + 'COMPRA CANCELADAA ');
+        }),
+        catchError((error) => {
+          return throwError(() => new Error('Error al empezar la compra'));
         })
       );
   }

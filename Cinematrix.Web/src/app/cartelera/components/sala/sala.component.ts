@@ -2,12 +2,20 @@ import {
   Component,
   effect,
   EventEmitter,
+  inject,
   input,
+  OnChanges,
   Output,
   signal,
+  SimpleChanges,
 } from '@angular/core';
-import { AsientoEstado, Sala } from '../../interfaces/rest-sala.interface';
+import {
+  AsientoEstado,
+  Sala,
+  EstadoAsiento,
+} from '../../interfaces/rest-sala.interface';
 import { Asiento, Asientos } from '../../interfaces/asientos.interface';
+import { CarteleraService } from '../../services/cartelera.service';
 
 @Component({
   selector: 'app-sala',
@@ -15,21 +23,28 @@ import { Asiento, Asientos } from '../../interfaces/asientos.interface';
   templateUrl: './sala.component.html',
   styleUrl: './sala.component.css',
 })
-export class SalaComponent {
+export class SalaComponent implements OnChanges {
   sala = input<Sala | undefined>(undefined);
   salaCopy = signal<string[]>([]);
 
   cantidadEntradas = input<number>(0);
-
-
+  carteleraService = inject(CarteleraService);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['sala']) {
+      console.log('CHANGEES');
+      const salaKeys = Object.keys(this.sala()?.asientos ?? {});
+      this.salaCopy.set(salaKeys);
+      this.devuelveKeys();
+      const localInfo = this.carteleraService.loadFromLocalStorage().asientosSeleccionados;
+      // console.log(localInfo);
+      this.asientosSelected.set( localInfo?? []);
+    }
+  }
 
   @Output() estado = new EventEmitter<number>();
   @Output() asientosSeleccionadosOutput = new EventEmitter<string[]>();
 
-  salaInput = effect(() => {
-    const salaKeys = Object.keys(this.sala()?.asientos ?? {});
-    this.salaCopy.set(salaKeys);
-  });
+  salaInput = effect(() => {});
 
   asientos: Asiento[] = [];
   asientosSelected = signal<string[]>([]);
@@ -45,15 +60,19 @@ export class SalaComponent {
     const keys = this.sala()?.asientos[key] ?? [];
     // console.log(keys);
     let asientos: Asiento[] = [];
+    // console.log('SELECTED', this.asientosSelected());
 
     for (let asiento of keys) {
       const clave = Object.keys(asiento)[0];
       const valor = asiento[clave];
 
+      // const estaSeleccionada=this.asientosSelected().includes(this.carteleraService.loadFromLocalStorage().seleccionAsientos)
+      const infoLocal=this.carteleraService.loadFromLocalStorage()
       asientos.push({
         nombre: clave,
-        estado: valor,
+        estado: infoLocal.asientosSeleccionados?.includes(clave)?'DISPONIBLE':valor,
         imagen:
+        infoLocal.asientosSeleccionados?.includes(clave)?'seat_select.svg':
           valor === 'DISPONIBLE'
             ? 'seat_free.svg'
             : valor === 'NO_DISPONIBLE'
@@ -64,13 +83,19 @@ export class SalaComponent {
       });
     }
 
+    // console.log(asientos);
     return asientos;
   }
 
-  onSeatClick(asiento: string): void {
+  onSeatClick(asiento: string, estado: string): void {
+    if (estado === 'OCUPADO' && !this.asientosSelected().includes(asiento) || estado === '') return;
+
     const encontarAsiento = this.asientosSelected().filter(
       (el) => el === asiento
     );
+
+
+
 
     if (encontarAsiento.length > 0) {
       const arrQuitarAsiento = this.asientosSelected().filter(
@@ -78,7 +103,8 @@ export class SalaComponent {
       );
       this.asientosSelected.set(arrQuitarAsiento);
     } else {
-      if (this.asientosSelected().length >= this.cantidadEntradas()) return;
+      if (encontarAsiento)
+        if (this.asientosSelected().length >= this.cantidadEntradas()) return;
       const copiaArr = [...this.asientosSelected()];
       copiaArr.push(asiento);
       this.asientosSelected.set(copiaArr);
@@ -90,6 +116,7 @@ export class SalaComponent {
   }
 
   nextStep() {
-    this.asientosSeleccionadosOutput.emit(this.asientosSelected())
+    console.log(this.asientosSelected());
+    this.asientosSeleccionadosOutput.emit(this.asientosSelected());
   }
 }
