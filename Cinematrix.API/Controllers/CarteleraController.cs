@@ -300,7 +300,7 @@ namespace Cinematrix.API.Controllers
                 var OcupacionesYaExisten = await context.Ocupaciones.Where(t => asientosSeleccionados.Contains(t.Butaca) && t.SesionId==compra.SesionId).ToListAsync();
                 if (OcupacionesYaExisten.Any())
                 {
-                    System.Diagnostics.Debug.WriteLine("Ya existen");
+                   
                     return BadRequest("Alguno de los asientos está reservado.");
                 }
                 context.Ocupaciones.AddRange(ocupaciones);
@@ -354,6 +354,53 @@ namespace Cinematrix.API.Controllers
             return Ok(idCompra);
         }
 
+        [HttpGet("compra/detalle/{idCompra:int}")]
+
+        public async Task<ActionResult<DetalleCompraDTO>> getDetalleCompra(int idCompra)
+        {
+            var compra = await context.Compras.FirstOrDefaultAsync(c => c.Id == idCompra);
+
+            if(compra is null)
+            {
+                return BadRequest($"No existe el id de compra {idCompra}");
+            }
+
+            if (compra.Estado == EstadoCompra.Cancelada)
+            {
+                return BadRequest($"La compra con id ${idCompra} está cancelada");
+            }
+
+            var sesion = await context.Sesiones.FirstOrDefaultAsync(s => s.Id == compra.SesionId);
+
+            if (sesion is null)
+            {
+                return BadRequest($"La compra con id ${idCompra} no tiene sesión");
+            }
+
+            var sala = await context.Salas.Where(s => s.Id == sesion.SalaId).ToListAsync();
+
+            if(sala is null)
+            {
+                return BadRequest($"La compra con id ${idCompra} no tiene sala");
+            }
+
+            var pelicula = await context.Sesiones.Where(s => s.Id == sesion.Id).Select(s => s.Pelicula).FirstOrDefaultAsync();
+
+            if(pelicula is null)
+            {
+                return BadRequest($"La compra con id ${idCompra} no tiene película");
+            }
+
+            var tarifas = await context.Ocupaciones.Where(o => o.CompraId == compra.Id).GroupBy(x => x.TarifaNombre).Select(y => new DetalleTarifaDTO { Nombre = y.Key, Cantidad = y.Count() }).ToListAsync();
+
+            return Ok(
+                new DetalleCompraDTO { Pelicula = pelicula.Titulo, Sala = sala[0].Nombre, Fecha = sesion.Inicio, Tarifas = tarifas, Total = compra.Importe ?? 0 });
+
+        }
+
     }
-    
-}
+
+
+   
+
+    }

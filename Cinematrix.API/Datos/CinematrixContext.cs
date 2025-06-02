@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cinematrix.API.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinematrix.API.Datos;
 
-public partial class CinematrixContext : DbContext
+public partial class CinematrixContext : IdentityDbContext
 {
     public CinematrixContext()
     {
@@ -40,6 +41,7 @@ public partial class CinematrixContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Compra>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Compra__3213E83F8A962A2B");

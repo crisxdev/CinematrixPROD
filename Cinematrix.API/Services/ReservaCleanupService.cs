@@ -25,7 +25,7 @@ namespace Cinematrix.API.Services
                     var vencidas = await dbContext.Compras
                         .Where(c => c.Estado == EstadoCompra.EnProceso && c.Inicio < DateTime.Now.AddMinutes(-15))
                         .ToListAsync();
-
+                    System.Diagnostics.Debug.WriteLine(vencidas.Count);
                     if (vencidas.Any())
                     {
                         foreach (var compra in vencidas)
