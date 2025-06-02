@@ -187,7 +187,7 @@ export class CarteleraSesionPageComponent implements OnInit {
   });
 
   resultadoTarifas = effect(() => {
-    
+
     const value = this.tarifasResource.value();
     if (value) {
       this.estadoProceso.set(1)};
