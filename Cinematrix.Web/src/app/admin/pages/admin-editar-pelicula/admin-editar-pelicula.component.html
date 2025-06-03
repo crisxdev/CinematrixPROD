@@ -1,0 +1,126 @@
+<div class="flex place-content-center mt-10">
+  @if(form){
+  <div class="max-h-[80vh] overflow-y-auto scroll-form bg-secondary-content">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <fieldset
+        class="fieldset bg-base-200 border-base-300 rounded-box w-md border p-4"
+      >
+        <label class="label">Título</label>
+        <input
+          type="text"
+          class="input input-md w-full"
+          placeholder="My awesome page"
+          formControlName="titulo"
+        />
+
+        <label class="label">Año</label>
+        <input
+          type="text"
+          class="input input-md w-full"
+          placeholder="my-awesome-page"
+          formControlName="anio"
+        />
+
+        <label class="label">Duracion</label>
+        <input
+          type="text"
+          class="input input-md w-full"
+          placeholder="Name"
+          formControlName="duracion"
+        />
+
+        <label class="label">Tráiler</label>
+        <textarea
+          placeholder="Bio"
+          class="textarea textarea-xs w-full"
+          formControlName="trailer"
+        ></textarea>
+
+        <label class="label">Sinopsis</label>
+        <textarea
+          placeholder="Bio"
+          class="textarea textarea-xs w-full"
+          formControlName="sinopsis"
+        ></textarea>
+
+        <label class="label">Categoría</label>
+        <select class="select w-full" formControlName="categoria">
+          @for(cat of peliculasResource.value()?.categorias ?? []; track cat){
+          <option [value]="cat">{{ cat | titlecase }}</option>
+
+          }
+        </select>
+
+        <label class="label">Calificación</label>
+        <select class="select w-full" formControlName="calificacion">
+          @for(cal of peliculasResource.value()?.calificaciones ?? []; track
+          cal){
+          <option [value]="cal">{{ cal | titlecase }}</option>
+
+          }
+        </select>
+
+        <label class="label">Formato</label>
+        <select class="select w-full" formControlName="formato">
+          @for(cal of peliculasResource.value()?.formatos; track cal){
+          <option [value]="cal">{{ cal | titlecase }}</option>
+
+          }
+        </select>
+        <label class="label">Póster</label>
+        <textarea
+          placeholder="Bio"
+          class="textarea textarea-xs w-full"
+          formControlName="imagen"
+        ></textarea>
+        <div class="flex gap-3 flex-col items-center">
+          <div class="w-full">
+            <label class="label">Imagen</label>
+            <textarea
+              placeholder="Bio"
+              class="textarea textarea-xs w-full"
+              formControlName="imagen"
+            ></textarea>
+          </div>
+          <img
+            [src]="form.get('imagen')?.value"
+            alt="Póster"
+            class="w-30 rounded"
+          />
+        </div>
+        <div class="flex gap-4 mt-2">
+          <div class="w-1/2">
+            <button class="btn btn-primary w-full">Guardar</button>
+          </div>
+          <div class="w-1/2">
+            <button
+              class="btn btn-error w-full"
+              onclick="my_modal_3.showModal()"
+            >
+              Eliminar
+            </button>
+
+            <dialog id="my_modal_3" class="modal">
+              <div class="modal-box">
+                <form method="dialog">
+                  <h3 class="text-lg font-bold">Confirmación!</h3>
+                <p class="py-4">Está seguro de que quiere eliminar {{peliculasResource.value()?.pelicula?.titulo|titlecase}}</p>
+                  <button
+                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                  >
+                    ✕
+                  </button>
+                   <button class="btn btn-error" (click)="eliminar.set(true)">Sí, quiero eliminar</button>
+                </form>
+
+
+              </div>
+            </dialog>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  }
+</div>

@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
-  fb=inject(FormBuilder)
+  fb = inject(FormBuilder);
 
   private _authService = inject(AuthService);
   public get authService() {
@@ -23,7 +23,7 @@ export class LoginPageComponent {
   isPosting = signal(false);
   router = inject(Router);
 
-    loginForm = this.fb.group({
+  loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
@@ -37,11 +37,11 @@ export class LoginPageComponent {
       return;
     }
     const { email = '', password = '' } = this.loginForm.value;
-    console.log({email,password});
-     this.authService.login(email!, password!).subscribe((isAuthenticated) => {
-      console.log(isAuthenticated)
+    console.log({ email, password });
+    this.authService.login(email!, password!).subscribe((isAuthenticated) => {
+      console.log(isAuthenticated);
       if (isAuthenticated) {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/admin');
         return;
       }
 
@@ -50,6 +50,5 @@ export class LoginPageComponent {
         this.hasError.set(false);
       }, 2000);
     });
-  }}
-
-
+  }
+}

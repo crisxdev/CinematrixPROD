@@ -3,8 +3,9 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
+import { rxResource } from '@angular/core/rxjs-interop';
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
-const API_URL = 'https://localhost:7243/api/usuarios/login';
+const API_URL = 'https://localhost:7243/api/usuarios';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,6 +13,10 @@ export class AuthService {
   private _user = signal<string | null>(null);
   private _token = signal<string | null>(localStorage.getItem('token'));
   private http = inject(HttpClient);
+
+  checkStatusResource = rxResource({
+    loader: () => this.checkStatus(),
+  });
 
   authStatus = computed<AuthStatus>(() => {
     if (this._authStatus() === 'checking') return 'checking';
@@ -26,9 +31,9 @@ export class AuthService {
   user = computed(() => this._user());
   token = computed(this._token);
 
- login(email: string, password: string): Observable<boolean> {
+  login(email: string, password: string): Observable<boolean> {
     return this.http
-      .post<AuthResponse>(`${API_URL}`, {
+      .post<AuthResponse>(`${API_URL}/login`, {
         email: email,
         password: password,
       })
@@ -38,7 +43,27 @@ export class AuthService {
       );
   }
 
-    logout() {
+  checkStatus(): Observable<boolean> {
+    const token = localStorage.getItem('token');
+    console.log(token);
+    if (!token) {
+      this.logout();
+      return of(false);
+    }
+
+    return this.http
+      .get<AuthResponse>(`${API_URL}/verificar`, {
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      })
+      .pipe(
+        map((resp) => this.handleAuthSuccess(resp)),
+        catchError((error: any) => this.handleAuthError(error))
+      );
+  }
+
+  logout() {
     this._user.set(null);
     this._token.set(null);
     this._authStatus.set('not-authenticated');
@@ -56,8 +81,10 @@ export class AuthService {
     return true;
   }
 
-   private handleAuthError(error: any) {
+  private handleAuthError(error: any) {
     this.logout();
     return of(false);
   }
+
+
 }

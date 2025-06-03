@@ -1,0 +1,16 @@
+.scroll-form::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll-form::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  border-radius: 6px;
+}
+
+.scroll-form::-webkit-scrollbar-thumb:hover {
+  background-color: #1f2937;
+}
+
+.scroll-form::-webkit-scrollbar-track {
+  background-color: #d1d5db;
+}

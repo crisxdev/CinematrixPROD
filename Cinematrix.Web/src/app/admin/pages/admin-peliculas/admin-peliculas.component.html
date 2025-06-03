@@ -1,0 +1,46 @@
+<div class="mt-10">
+  <h1 class="text-white text-4xl font-medium mb-2">Películas</h1>
+  <div
+    class="overflow-x-auto rounded-box border border-base-content/5 bg-secondary-content"
+  >
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Año</th>
+          <th>Calificación</th>
+          <th>Categoría</th>
+          <th>Duración</th>
+          <th>Formato</th>
+          <th>Sinopsis</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- row 1 -->
+        @for(pelicula of peliculasResource.value(); track pelicula){
+        <tr>
+          <th>{{ pelicula.titulo |titlecase }}</th>
+          <td>{{ pelicula.anio }}</td>
+          <td>{{ pelicula.calificacion }}</td>
+          <td>{{ pelicula.categoria | titlecase}}</td>
+          <td>{{ pelicula.duracion }}</td>
+          <td>{{ pelicula.formato }}</td>
+          <td class="truncate max-w-[200px] whitespace-nowrap overflow-hidden">
+            {{ pelicula.sinopsis }}
+          </td>
+
+          <td>
+            <button class="btn btn-sm btn-outline btn-primary" (click)="goToEditFilm(pelicula.id)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </td>
+        </tr>
+        }
+
+        <!-- row 2 -->
+      </tbody>
+    </table>
+  </div>
+</div>
