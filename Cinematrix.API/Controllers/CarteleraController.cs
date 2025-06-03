@@ -27,7 +27,7 @@ namespace Cinematrix.API.Controllers
             this.mapper = mapper;
         }
 
-        public IMapper Mapper { get; }
+        
 
 
 
@@ -167,12 +167,13 @@ namespace Cinematrix.API.Controllers
 
             //Método sin implementar
             var sesion = await context.Sesiones.Where(x => x.Id == id).ToListAsync();
+            
 
             if (sesion.Count == 0) return BadRequest($"Sesión {id} no existe");
             var nombresTarifas = creacionCompraDTO.Select(x => x.Nombre).ToList();
             decimal total = 0;
             var tarifasResult = await context.Tarifas.Where(t => nombresTarifas.Contains(t.Nombre)).ToListAsync();
-
+            
 
             for (int i = 0; i < creacionCompraDTO.Count; i++)
             {

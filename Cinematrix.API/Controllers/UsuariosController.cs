@@ -52,6 +52,21 @@ namespace Cinematrix.API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("verificar")]
+        public async Task<ActionResult> Verificar()
+        {
+            var email = User.FindFirstValue("email");
+            if (email == null) return Unauthorized();
+
+            var usuario = await userManager.FindByEmailAsync(email);
+            if (usuario == null) return Unauthorized();
+
+            var respuesta = ConstruirTokenRenovado(usuario);
+            return Ok(respuesta);
+
+        }
+
         private ActionResult RetornarLoginIncorrecto()
         {
             ModelState.AddModelError(string.Empty, "Login incorrecto");
@@ -82,5 +97,37 @@ namespace Cinematrix.API.Controllers
 
             //var usuario=await 
         }
+
+        private RespuestaAutenticationDTO ConstruirTokenRenovado(IdentityUser usuario)
+        {
+            var claims = new List<Claim>
+    {
+        new Claim("email", usuario.Email!)
+    };
+
+            var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llavejwt"]!));
+            var credenciales = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
+
+            var expiracion = DateTime.UtcNow.AddDays(1);
+
+            var tokenDeSeguridad = new JwtSecurityToken(
+                issuer: null,
+                audience: null,
+                claims: claims,
+                expires: expiracion,
+                signingCredentials: credenciales
+            );
+
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenDeSeguridad);
+
+            return new RespuestaAutenticationDTO
+            {
+                Token = token,
+                User = usuario.Email!
+            };
+        }
+
+
+
     }
 }
