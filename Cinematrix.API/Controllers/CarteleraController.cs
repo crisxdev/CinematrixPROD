@@ -325,9 +325,8 @@ namespace Cinematrix.API.Controllers
         [HttpPost("compra/cancelar/{idCompra:int}")]
         public async Task<ActionResult> CancelarCompra(int idCompra) {
 
-            System.Diagnostics.Debug.WriteLine("cANCELANDOOO"+idCompra);
             var compra = await context.Compras.FirstOrDefaultAsync(c => c.Id == idCompra);
-            System.Diagnostics.Debug.WriteLine(compra.Id + "no es null");
+      
             if (compra is null)
             {
                 
