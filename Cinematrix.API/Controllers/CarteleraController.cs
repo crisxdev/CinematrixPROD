@@ -36,10 +36,11 @@ namespace Cinematrix.API.Controllers
         public async Task<ActionResult<CarteleraDTO>> Get([FromQuery] DateTime? dia)
         {
 
-
+            DateTime ahora = DateTime.Now;
             DateTime diaFin;
             DateTime diaIni;
-            diaIni = dia.HasValue ? new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day) : DateTime.Now.Date;
+            //diaIni = dia.HasValue ? new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day) : DateTime.Now.Date;
+            diaIni = !dia.HasValue || dia.Value.Date == DateTime.Now.Date ? ahora : new DateTime(dia.Value.Year, dia.Value.Month, dia.Value.Day);
             //if (diaIni.Day != DateTime.Now.Day)
             //{
             //    if (dia.HasValue)
@@ -48,7 +49,7 @@ namespace Cinematrix.API.Controllers
             //    }
 
             //}
-            diaFin = diaIni.AddDays(1);
+            diaFin = diaIni.Date.AddDays(1);
 
             // Busca películas por un día determinado, trae la info de las pelis aunque no tengan sesiones ese día.
 
@@ -96,7 +97,7 @@ namespace Cinematrix.API.Controllers
                     Calificacion = p.Calificacion,
                     Sinopsis = p.Sinopsis,
                     Trailer = p.Trailer,
-                    Sesiones = p.Sesiones.Where(s => s.Inicio >= diaIni && s.Inicio < diaFin ).Select(s => new SesionDTO
+                    Sesiones = p.Sesiones.Where(s => s.Inicio >= diaIni && s.Inicio < diaFin && s.Estado == EstadoSesion.Activa).Select(s => new SesionDTO
                     {
                         Id = s.Id,
                         Inicio = s.Inicio

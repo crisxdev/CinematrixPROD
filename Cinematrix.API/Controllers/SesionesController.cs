@@ -54,7 +54,8 @@ namespace Cinematrix.API.Controllers
         [Route("{idSesion}")]
         public async Task<ActionResult> Put([FromBody] PutEditarSesionDTO sesion, int idSesion)
         {
-          
+            
+           
             if (idSesion != sesion.Id)
             {
                 return BadRequest("El Id no coincide");
@@ -225,11 +226,16 @@ namespace Cinematrix.API.Controllers
         [Route("crear")]
         public async Task<ActionResult> Post([FromBody] PutEditarSesionDTO sesion)
         {
-
+            System.Diagnostics.Debug.WriteLine($"Inicio recibido: {sesion?.Inicio}");
             try
             {
                 var nuevaSesion = new Sesion();
+                if (sesion == null || sesion.Inicio is null)
+                    return BadRequest("La fecha de inicio es obligatoria");
+
                 nuevaSesion.Estado = sesion.Estado;
+              
+
                 if (sesion.Inicio.HasValue) nuevaSesion.Inicio = sesion.Inicio.Value;
                 var pelicula = await context.Peliculas.Where(x => x.Id == sesion.IdPelicula).FirstOrDefaultAsync();
                 if (pelicula is null) return NotFound("No se encuentra la película asignada");
@@ -244,7 +250,7 @@ namespace Cinematrix.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error al añadir la sesión: {ex.InnerException}");
+                return StatusCode(500, $"Error al añadir la sesión: ");
             }
 
             return Ok();
