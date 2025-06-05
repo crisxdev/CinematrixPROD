@@ -10,6 +10,7 @@ using Cinematrix.API.Common;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Transactions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Cinematrix.API.Controllers
 {
@@ -81,7 +82,7 @@ namespace Cinematrix.API.Controllers
 
             System.Diagnostics.Debug.WriteLine(diaIni.ToString("dd/MM/yyyy HH/mm/ss"), diaFin.ToString("dd/MM/yyyy HH/mm/ss"));
 
-            var peliculas = await context.Peliculas.Include(x => x.Sesiones).Where(x => x.Sesiones.Any(s => s.Inicio > diaIni && s.Inicio < diaFin))
+            var peliculas = await context.Peliculas.Include(x => x.Sesiones).Where(x => x.Sesiones.Any(s => s.Inicio > diaIni && s.Inicio < diaFin && s.Estado == EstadoSesion.Activa))
                 .Select(p => new PeliculaDTO
                 {
                     Id = p.Id,
@@ -95,7 +96,7 @@ namespace Cinematrix.API.Controllers
                     Calificacion = p.Calificacion,
                     Sinopsis = p.Sinopsis,
                     Trailer = p.Trailer,
-                    Sesiones = p.Sesiones.Where(s => s.Inicio >= diaIni && s.Inicio < diaFin).Select(s => new SesionDTO
+                    Sesiones = p.Sesiones.Where(s => s.Inicio >= diaIni && s.Inicio < diaFin ).Select(s => new SesionDTO
                     {
                         Id = s.Id,
                         Inicio = s.Inicio
@@ -179,7 +180,7 @@ namespace Cinematrix.API.Controllers
             {
                 if (tarifasResult[i].Nombre == nombresTarifas[i])
                 {
-                    total += tarifasResult[i].Precio ?? 0 * creacionCompraDTO[i].Cantidad;
+                    total += (tarifasResult[i].Precio ?? 0) * creacionCompraDTO[i].Cantidad;
                 }
 
 
@@ -394,14 +395,72 @@ namespace Cinematrix.API.Controllers
 
             var tarifas = await context.Ocupaciones.Where(o => o.CompraId == compra.Id).GroupBy(x => x.TarifaNombre).Select(y => new DetalleTarifaDTO { Nombre = y.Key, Cantidad = y.Count() }).ToListAsync();
 
+            var ocupaciones = await context.Ocupaciones.Where(x => x.CompraId == compra.Id).Select(x=>x.Butaca).ToListAsync();
+
             return Ok(
-                new DetalleCompraDTO { Pelicula = pelicula.Titulo, Sala = sala[0].Nombre, Fecha = sesion.Inicio, Tarifas = tarifas, Total = compra.Importe ?? 0 });
+                new DetalleCompraDTO { Pelicula = pelicula.Titulo, Sala = sala[0].Nombre, Fecha = sesion.Inicio, Tarifas = tarifas, Total = compra.Importe ?? 0 , Butacas=ocupaciones});
 
         }
 
+
+        [HttpPost("compra/finalizar/{id:int}")]
+        public async Task<ActionResult> FinalizarCompra(int id)
+        {
+            System.Diagnostics.Debug.WriteLine(id);
+            var compra = await context.Compras.FirstOrDefaultAsync(c => c.Id == id);
+            if (compra is null)
+            {
+                System.Diagnostics.Debug.WriteLine("No existe la compra");
+                return NotFound("La compra no existe.");
+            }
+
+            if (compra.Estado != EstadoCompra.EnProceso)
+            {
+                System.Diagnostics.Debug.WriteLine("No existe la compra 1");
+                return BadRequest("No se puede finalizar una compra que no está en proceso");
+            }
+
+
+            using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                var OcupacionesYaExisten = await context.Ocupaciones.Where(t => t.CompraId == id).ToListAsync();
+                if (OcupacionesYaExisten.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("La ocupación ya existe");
+                    return BadRequest("No hay asientos reservados para la compra");
+                }
+
+
+
+                foreach (var ocupacion in OcupacionesYaExisten)
+                {
+                    ocupacion.Estado = EstadoButaca.Pagada;
+                }
+                compra.Estado = EstadoCompra.Aprobada;
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return Ok(new
+                {
+                    mensaje="Compra realizada correctamente"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, "Error al finalizar la compra: " + ex.InnerException);
+            }
+            
+
+        }
+
+
     }
 
+          
 
-   
+
 
     }

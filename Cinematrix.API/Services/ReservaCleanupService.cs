@@ -14,6 +14,7 @@ namespace Cinematrix.API.Services
             _serviceProvider = serviceProvider;
         }
 
+        //Comprueba cada 30 segundos, si hay compras en proceso que llevan mas de 15 minutos y las cancela y sus butacas.
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)

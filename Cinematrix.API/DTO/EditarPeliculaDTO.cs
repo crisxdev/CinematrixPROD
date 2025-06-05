@@ -6,6 +6,6 @@
         public required List<string> Calificaciones { get; set; }
         public required List<string> Formatos { get; set; }
 
-        public required PeliculaDTO Pelicula { get; set; }
+        public  PeliculaDTO? Pelicula { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace Cinematrix.API.Controllers
         public async Task<ActionResult<List<PeliculaDTO>>> Pelicula()
         {
 
-            var peliculas = await context.Peliculas.ToListAsync();
+            var peliculas = await context.Peliculas.OrderByDescending(x=>x.Id).ToListAsync();
 
             var peliculasDTO = mapper.Map<List<PeliculaDTO>>(peliculas);
 
@@ -54,6 +54,23 @@ namespace Cinematrix.API.Controllers
 
             return new EditarPeliculaDTO { Calificaciones=CalificacionesPelicula.Todas, Categorias=CategoriaPelicula.Todas, 
             Formatos=FormatosPeliculas.Todas,Pelicula=peliculaDTO
+            };
+
+        }
+
+
+        [HttpGet]
+        [Route("info")]
+        public ActionResult<EditarPeliculaDTO> GetPeliculaParametros(int id)
+        {
+
+
+            return new EditarPeliculaDTO
+            {
+                Calificaciones = CalificacionesPelicula.Todas,
+                Categorias = CategoriaPelicula.Todas,
+                Formatos = FormatosPeliculas.Todas,
+                
             };
 
         }
@@ -102,6 +119,7 @@ namespace Cinematrix.API.Controllers
 
 
         [HttpPost]
+
         public async Task<ActionResult> PostPelicula([FromBody] Pelicula pelicula)
         {
             try
@@ -119,11 +137,40 @@ namespace Cinematrix.API.Controllers
                     Titulo=pelicula.Titulo,
                     Trailer=pelicula.Trailer,
                 };
+                context.Peliculas.Add(peliculaDB);
                 await context.SaveChangesAsync();
             }
             catch(Exception ex)
             {
                 return StatusCode(500, $"Error en inserción de película: {ex.Message}");
+            }
+
+            return NoContent();
+
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeletePelicula(int id)
+        {
+            try
+            {
+                var peliculaDb = await context.Peliculas.Include(x=>x.Sesiones).FirstOrDefaultAsync(x => x.Id == id);
+                if (peliculaDb is null) return NotFound($"No se ha encontrado la película con id {id} a eliminar");
+                var sesiones = peliculaDb.Sesiones.ToList();
+         
+                if (sesiones.Count > 0)
+                {
+                    System.Diagnostics.Debug.Write("ENTRROOOOOOOOOOOO");
+                    return BadRequest("No se puede eliminar una película con sesiones");
+                }
+
+                context.Peliculas.Remove(peliculaDb);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error en eliminación de película: {ex.InnerException}");
             }
 
             return NoContent();

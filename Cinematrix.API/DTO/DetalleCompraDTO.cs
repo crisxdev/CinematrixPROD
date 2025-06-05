@@ -13,5 +13,7 @@
 
         public required string Pelicula { get; set; }
 
+        public required List<string> Butacas { get; set; }
+
     }
 }
