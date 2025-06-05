@@ -11,6 +11,7 @@ import { PostTarifa, RESTTarifa } from '../interfaces/rest-tarifa.interface';
 import { Tarifas } from '../interfaces/tarifas-interface';
 import { Sala } from '../interfaces/rest-sala.interface';
 import { LocalStorage } from '../interfaces/local-storage.interface';
+import { DetalleREST } from '../interfaces/detalle-compra-rest.interface';
 
 const API_URL = 'https://localhost:7243/api/cartelera';
 
@@ -118,9 +119,6 @@ export class CarteleraService {
                 ...storage,
                 tarifas: tarifasPost,
                 idCompra: res.compraId,
-
-
-
               };
               console.log(obj);
               this.saveToLocalStorage(obj);
@@ -140,7 +138,7 @@ export class CarteleraService {
           let obj = {
             tarifas: tarifasPost,
             idCompra: res.compraId,
-            estado:1
+            estado: 1,
           };
           this.saveToLocalStorage(obj);
         }),
@@ -171,7 +169,7 @@ export class CarteleraService {
             tarifas: infoLocal.tarifas,
             idCompra: infoLocal.idCompra,
             asientosSeleccionados: asientosSeleccionados,
-            estado:2
+            estado: 2,
           });
         }),
         catchError((error) => {
@@ -193,6 +191,31 @@ export class CarteleraService {
           return throwError(() => new Error('Error al empezar la compra'));
         })
       );
+  }
+
+  getDetalleCompra() {
+    const infoLocal = this.loadFromLocalStorage();
+    return this.http
+      .get<DetalleREST>(`${API_URL}/compra/detalle/${infoLocal.idCompra}`)
+      .pipe(
+        map((res) => CarteleraMapper.mapRESTDetalleToDetalle(res)),
+        tap((res) => console.log(res)),
+        catchError((error) => {
+          return throwError(() => new Error('Error al empezar la compra'));
+        })
+      );
+  }
+
+  postFinalizarCompra() {
+    console.log("Va a finalizar");
+    const infoLocal = this.loadFromLocalStorage();
+    return this.http.post<string>(`${API_URL}/compra/finalizar/${infoLocal.idCompra}`,{}).pipe(
+
+      tap((res) => console.log(res)),
+      catchError((error) => {
+        return throwError(() => new Error('Error al empezar la compra'));
+      })
+    );
   }
   // getSala(idSesion: number) {
   //   return this.http.get<Sala>(`${API_URL}/compra/${idSesion}`).pipe(

@@ -1,7 +1,17 @@
 <div class="mt-10">
-  <h1 class="text-white text-4xl font-medium mb-2">Películas</h1>
+  <div class="flex w-full justify-between items-center pb-5">
+    <h1 class="text-white text-4xl font-medium ">Películas</h1>
+    <div>
+    <i
+      class="fa-solid fa-circle-plus cursor-pointer text-[35px] text-[#b197fc] hover:"
+      (click)="goCreateFilm()"
+
+    ></i>
+    </div>
+  </div>
+  <!--bg-secondary-content text-[#3b0a57]-->
   <div
-    class="overflow-x-auto rounded-box border border-base-content/5 bg-secondary-content"
+    class="overflow-x-auto rounded-box border border-base-content/5 bg-[#f5f5f7] text-[#3b0a57] max-h-[70vh] overflow-y-auto"
   >
     <table class="table">
       <!-- head -->
@@ -18,13 +28,13 @@
         </tr>
       </thead>
       <tbody>
-        <!-- row 1 -->
+
         @for(pelicula of peliculasResource.value(); track pelicula){
         <tr>
-          <th>{{ pelicula.titulo |titlecase }}</th>
+          <th (click)="goToEditFilm(pelicula.id)"><p class="cursor-pointer">{{ pelicula.titulo | titlecase }}</p> </th>
           <td>{{ pelicula.anio }}</td>
           <td>{{ pelicula.calificacion }}</td>
-          <td>{{ pelicula.categoria | titlecase}}</td>
+          <td>{{ pelicula.categoria | titlecase }}</td>
           <td>{{ pelicula.duracion }}</td>
           <td>{{ pelicula.formato }}</td>
           <td class="truncate max-w-[200px] whitespace-nowrap overflow-hidden">
@@ -32,14 +42,17 @@
           </td>
 
           <td>
-            <button class="btn btn-sm btn-outline btn-primary" (click)="goToEditFilm(pelicula.id)">
+            <button
+              class="btn btn-sm btn-outline btn-primary"
+              (click)="goToEditFilm(pelicula.id)"
+            >
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
           </td>
         </tr>
         }
 
-        <!-- row 2 -->
+       
       </tbody>
     </table>
   </div>

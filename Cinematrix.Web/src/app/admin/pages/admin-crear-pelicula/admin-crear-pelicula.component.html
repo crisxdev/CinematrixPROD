@@ -1,7 +1,8 @@
- @if(errorEliminar()){
+@if(mostrarAlertas()){ @if(!crearPeliculaResource.error() &&
+crearPeliculaResource.hasValue()){
 <div
   role="alert"
-  class="alert alert-error w-80 md:w-80 absolute left-10 md:left-[20%] z-10"
+  class="alert alert-success w-80 md:w-80 absolute left-10 md:left-[20%] z-10"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -16,17 +17,11 @@
       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
     />
   </svg>
-
-    <span>Ups! Error de eliminación. Revisa que no haya sesiones asociadas</span>
-
+  <span>Película creada correctamente!</span>
 </div>
-  }
+}@else {
 
-   @if(errorEditar()){
-<div
-  role="alert"
-  class="alert alert-error w-80 md:w-80 absolute left-10 md:left-[20%] z-10"
->
+<div role="alert" class="alert alert-success w-100 absolute left-70">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     class="h-6 w-6 shrink-0 stroke-current"
@@ -40,18 +35,10 @@
       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
     />
   </svg>
-
-    <span>Ups! Ha ocurrido algún error al guadar</span>
-
+  <span>Algo ha ocurrido:( No se ha podido guardar los cambios</span>
 </div>
-  }
 
-
-
-
-
-
-
+} }
 
 <div
   class="flex flex-col md:flex-row md:justify-center items-center md:items-start gap-5 mt-2 md:mt-10 mb-10"
@@ -66,7 +53,7 @@
     </p>
   </div>
   @if(form){
-  <div class="max-h-[80vh] overflow-y-auto bg-secondary-content relative">
+  <div class="max-h-[80vh] overflow-y-auto  bg-secondary-content relative">
     <form [formGroup]="form" (ngSubmit)="save()">
       <fieldset
         class="fieldset bg-[#e9e5f3] border-base-300 rounded-box w-xs md:w-md border p-4"
@@ -75,39 +62,45 @@
         <input
           type="text"
           class="input input-md w-full"
-          placeholder="My awesome page"
+          placeholder=""
           formControlName="titulo"
-          readonly
         />
         @if(form.get('titulo')?.invalid && form.get('titulo')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("titulo") }}
+
+          {{ getFieldError('titulo') }}
         </span>
 
         }
+
         <label class="label">Año</label>
         <input
           type="text"
           class="input input-md w-full"
-          placeholder="my-awesome-page"
+          placeholder=""
           formControlName="anio"
         />
-        @if(form.get('anio')?.invalid && form.get('anio')?.touched){
+
+         @if(form.get('anio')?.invalid && form.get('anio')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("anio") }}
+
+          {{ getFieldError('anio') }}
         </span>
 
         }
+
         <label class="label">Duracion</label>
         <input
           type="text"
           class="input input-md w-full"
-          placeholder="Name"
+          placeholder=""
           formControlName="duracion"
         />
-        @if(form.get('duracion')?.invalid && form.get('duracion')?.touched){
+
+            @if(form.get('duracion')?.invalid && form.get('duracion')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("duracion") }}
+
+          {{ getFieldError('duracion') }}
         </span>
 
         }
@@ -117,22 +110,26 @@
           class="textarea textarea-xs w-full"
           formControlName="trailer"
         ></textarea>
-        @if(form.get('trailer')?.invalid && form.get('anio')?.touched){
+
+              @if(form.get('trailer')?.invalid && form.get('trailer')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("trailer") }}
+
+          {{ getFieldError('trailer') }}
         </span>
 
         }
 
         <label class="label">Sinopsis</label>
         <textarea
-          placeholder="Bio"
+          placeholder=""
           class="textarea textarea-xs w-full"
           formControlName="sinopsis"
         ></textarea>
-        @if(form.get('sinopsis')?.invalid && form.get('sinopsis')?.touched){
+
+              @if(form.get('sinopsis')?.invalid && form.get('sinopsis')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("sinopsis") }}
+
+          {{ getFieldError('sinopsis') }}
         </span>
 
         }
@@ -145,9 +142,10 @@
           }
         </select>
 
-        @if(form.get('categoria')?.invalid && form.get('categoria')?.touched){
+               @if(form.get('categoria')?.invalid && form.get('categoria')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("categoria") }}
+
+          {{ getFieldError('categoria') }}
         </span>
 
         }
@@ -161,9 +159,10 @@
           }
         </select>
 
-        @if(form.get('sinopsis')?.invalid && form.get('calificacion')?.touched){
+                  @if(form.get('calificacion')?.invalid && form.get('calificacion')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("calificacion") }}
+
+          {{ getFieldError('calificacion') }}
         </span>
 
         }
@@ -175,79 +174,56 @@
 
           }
         </select>
-        @if(form.get('formato')?.invalid && form.get('formato')?.touched){
+
+                  @if(form.get('formato')?.invalid && form.get('formato')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("formato") }}
+
+          {{ getFieldError('formato') }}
         </span>
 
         }
+        <div>
         <label class="label">Póster</label>
         <textarea
-          placeholder="Bio"
+          placeholder="URL de Póster"
           class="textarea textarea-xs w-full"
           formControlName="poster"
         ></textarea>
         @if(form.get('poster')?.invalid && form.get('poster')?.touched){
         <span class="form-text text-error">
-          {{ getFieldError("poster") }}
+
+          {{ getFieldError('poster') }}
         </span>
 
         }
+        </div>
+
         <div class="flex gap-3 flex-col items-center">
           <div class="w-full">
             <label class="label">Imagen</label>
             <textarea
-              placeholder="Bio"
+              placeholder="URL de imagen"
               class="textarea textarea-xs w-full"
               formControlName="imagen"
             ></textarea>
-            @if(form.get('imagen')?.invalid && form.get('imagen')?.touched){
-            <span class="form-text text-error">
-              {{ getFieldError("imagen") }}
-            </span>
 
-            }
+                      @if(form.get('imagen')?.invalid && form.get('imagen')?.touched){
+        <span class="form-text text-error">
+
+          {{ getFieldError('imagen') }}
+        </span>
+
+        }
           </div>
           <img
             [src]="form.get('imagen')?.value"
-            alt="Póster"
+            alt="Imagen"
             class="w-30 rounded"
           />
         </div>
-        <div class="flex gap-4 mt-2">
-          <div class="w-1/2">
+        <div class="flex items-center justify-center gap-4 mt-2">
+          <div class="w-full">
             <button class="btn btn-primary w-full">Guardar</button>
-          </div>
-          <div class="w-1/2">
-            <button
-              type="button"
-              class="btn btn-error w-full"
-              onclick="my_modal_3.showModal()"
-            >
-              Eliminar
-            </button>
-
-            <dialog id="my_modal_3" class="modal">
-              <div class="modal-box">
-                <form method="dialog">
-                  <h3 class="text-lg font-bold">Confirmación!</h3>
-                  <p class="py-4">
-                    Está seguro de que quiere eliminar
-                    {{
-                      peliculasResource.value()?.pelicula?.titulo | titlecase
-                    }}?
-                  </p>
-                  <button
-                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  >
-                    ✕
-                  </button>
-                  <button class="btn btn-error" (click)="eliminarPelicula()">
-                    Sí, quiero eliminar
-                  </button>
-                </form>
-              </div>
-            </dialog>
           </div>
         </div>
       </fieldset>

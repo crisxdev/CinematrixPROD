@@ -35,7 +35,7 @@ static mapRESTInfoPeliculaToInfoPelicula = (
       categorias: rest.categorias,
       calificaciones: rest.calificaciones,
       formatos: rest.formatos,
-      pelicula: this.mapRESTFilmToFilm(rest.pelicula),
+      pelicula: rest.pelicula?this.mapRESTFilmToFilm(rest.pelicula):null,
     };
   };
 }

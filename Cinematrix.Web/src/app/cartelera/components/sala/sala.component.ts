@@ -90,6 +90,7 @@ export class SalaComponent implements OnChanges {
   }
 
   onSeatClick(asiento: string, estado: string): void {
+
     if (estado === 'OCUPADO' && !this.asientosSelected().includes(asiento) || estado === '') return;
 
     const encontarAsiento = this.asientosSelected().filter(
@@ -103,6 +104,7 @@ export class SalaComponent implements OnChanges {
       const arrQuitarAsiento = this.asientosSelected().filter(
         (el) => el != asiento
       );
+
       this.asientosSelected.set(arrQuitarAsiento);
     } else {
       if (encontarAsiento)
@@ -118,6 +120,7 @@ export class SalaComponent implements OnChanges {
   }
 
   nextStep() {
+          if(this.cantidadEntradas()!=this.asientosSelected().length) return;
     console.log(this.asientosSelected());
     this.asientosSeleccionadosOutput.emit(this.asientosSelected());
   }

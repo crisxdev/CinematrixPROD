@@ -6,4 +6,5 @@ export interface LocalStorage{
   idCompra:string|undefined,
   asientosSeleccionados:string[]|undefined
   estado:number|undefined
+ //NUEVOOOOOOO
 }

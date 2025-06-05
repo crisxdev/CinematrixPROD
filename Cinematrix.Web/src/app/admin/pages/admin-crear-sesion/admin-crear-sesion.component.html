@@ -1,0 +1,133 @@
+@if(mostrarAlertas()){ @if(crearSesionResource.hasValue()){
+<div
+  role="alert"
+  class="alert alert-success w-80 md:w-80 absolute left-10 md:left-[20%] z-10"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+  <span>Sesión creada correctamente!</span>
+</div>
+}@else { @if(crearSesionResource.error()){
+<div
+  role="alert"
+  class="alert alert-error w-80 md:w-80 absolute left-10 md:left-[20%] z-10"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+  <span>No se ha podido crear la sesión</span>
+</div>
+} } }
+
+<div
+  class="flex flex-col md:flex-row md:justify-center items-center md:items-start gap-5 mt-2 md:mt-10 mb-10"
+>
+  <div>
+    <p>
+      <i
+        class="fa-regular fa-circle-left text-[40px] cursor-pointer"
+        (click)="goBack()"
+        style="color: #a397c9"
+      ></i>
+    </p>
+  </div>
+
+  <div class="max-h-[80vh] overflow-y-auto bg-secondary-content relative">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <fieldset
+        class="fieldset bg-[#e9e5f3] border-base-300 rounded-box w-xs md:w-md border p-4"
+      >
+        <label class="label">Película</label>
+        <select class="select w-full" formControlName="pelicula">
+          @for(cat of getInfoSesionPostResource.value()?.peliculas; track cat){
+          <option [value]="cat.titulo">{{ cat.titulo | titlecase }}</option>
+
+          }
+        </select>
+
+        @if(form.get('pelicula')?.invalid && form.get('pelicula')?.touched){
+        <span class="form-text text-error">
+          {{ getFieldError("pelicula") }}
+        </span>
+
+        }
+
+        <label class="label">Fecha de la sesión</label>
+        <input type="date" class="input w-full" formControlName="inicio" />
+
+        @if(form.get('inicio')?.invalid && form.get('inicio')?.touched){
+        <span class="form-text text-error">
+          {{ getFieldError("inicio") }}
+        </span>
+
+        }
+
+        <label class="label">Sala</label>
+        <select class="select w-full" formControlName="sala">
+          @for(item of getInfoSesionPostResource.value()?.salas ?? []; track
+          item){
+          <option [value]="item.nombre">{{ item.nombre | titlecase }}</option>
+
+          }
+        </select>
+
+        @if(form.get('sala')?.invalid && form.get('sala')?.touched){
+        <span class="form-text text-error">
+          {{ getFieldError("sala") }}
+        </span>
+
+        }
+
+        <label class="label">Fecha de inicio</label>
+        <input
+          type="text"
+          class="input input-md w-full"
+          readonly
+          [value]="fechaSiguiente() | date : 'medium'"
+        />
+
+        <label class="label">Estado</label>
+        <select class="select w-full" formControlName="estado">
+          @for(cat of estadoSesiones(); track cat){
+          <option [value]="cat">{{ cat | titlecase }}</option>
+
+          }
+        </select>
+
+        @if(form.get('estado')?.invalid && form.get('estado')?.touched){
+        <span class="form-text text-error">
+          {{ getFieldError("estado") }}
+        </span>
+
+        }
+
+        <div class="flex gap-4 mt-2">
+          <div class="w-full">
+            <button class="btn btn-primary w-full">Guardar</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

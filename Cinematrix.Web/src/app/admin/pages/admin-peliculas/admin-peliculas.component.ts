@@ -25,4 +25,8 @@ export class AdminPeliculasComponent {
       return this.adminService.getPeliculas();
     },
   });
+
+  goCreateFilm() {
+     this.router.navigate(['admin/peliculas/crear']);
+  }
 }

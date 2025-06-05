@@ -1,3 +1,5 @@
+import { DetalleREST } from '../interfaces/detalle-compra-rest.interface';
+import { Detalle } from '../interfaces/detalle-compra.interface';
 import { Fechas } from '../interfaces/fechas.interface';
 import { Pelicula, Sesion } from '../interfaces/pelicula.interface';
 import { FechasREST } from '../interfaces/rest-fecha.interface';
@@ -74,7 +76,20 @@ export class CarteleraMapper {
     }
     return arrTarifas;
   }
-  // static RESTCountry => country
 
-  // static RESTCountry[]=> Country[]
+    static mapRESTDetalleToDetalle = (detalle: DetalleREST): Detalle => {
+    return {
+      butacas:detalle.butacas,
+      fecha: detalle.fecha,
+      sala: detalle.sala,
+      total: detalle.total,
+      pelicula: detalle.pelicula,
+      tarifas: detalle.tarifas,
+    };
+  };
+
+  static mapRESTDetalleArrayToDetalleArray = (detalles: DetalleREST[]): Detalle[] => {
+    return detalles.map(this.mapRESTDetalleToDetalle);
+  };
+
 }

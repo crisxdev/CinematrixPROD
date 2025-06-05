@@ -23,13 +23,15 @@ import { Router } from '@angular/router';
   selector: 'app-lista-peliculas',
 
   imports: [NgClass, DatePipe, ReactiveFormsModule, NgStyle],
+  providers: [DatePipe],
   templateUrl: './lista-peliculas.component.html',
   styleUrl: './lista-peliculas.component.css',
 })
 export class ListaPeliculasComponent {
   private fb = inject(FormBuilder);
-  private router=inject(Router)
+  private router = inject(Router);
   @Output() dia = new EventEmitter<string>();
+  datePipe = inject(DatePipe);
 
   form: FormGroup = this.fb.group({
     fecha: [null],
@@ -50,7 +52,6 @@ export class ListaPeliculasComponent {
 
   carteleraResource = rxResource({
     loader: () => {
-
       return this.carteleraService.getDates(this.cantidadFechas);
     },
   });
@@ -98,8 +99,11 @@ export class ListaPeliculasComponent {
     console.log(selection);
     this.dateSelected = selection;
     const fechaObj = new Date(this.dateSelected ?? '');
-    this.dia.emit(fechaObj.toISOString());
-    // this.carteleraService.searchCartelera(fechaObj.toISOString());
+
+    const fecha = this.datePipe.transform(fechaObj ?? '', 'yyyy-MM-ddTHH:mm');
+    this.dia.emit(fecha ?? undefined);
+
+
   }
 
   getImagenUrl(nombre: string) {
@@ -107,7 +111,6 @@ export class ListaPeliculasComponent {
   }
 
   onHandleClickTrailer(trailerURL: string) {
-
     // if(!this.hovering()) return
 
     this.isOpenModal.set(true);
@@ -117,8 +120,7 @@ export class ListaPeliculasComponent {
   }
 
   onHandleClickSession(id: number) {
-
     // if(!this.hovering()) return
-    this.router.navigate(['cartelera/sesion',id])
+    this.router.navigate(['cartelera/sesion', id]);
   }
 }

@@ -1,13 +1,79 @@
-<div class="w-3xl bg-amber-50">
- <div>
-  <p
-    (click)="volver()"
-    class="text-red-600 cursor-pointer text-[16px] md:text-[18px] ml-[30px] md:ml-0"
-  >
-    < Volver
+<div class="w-[90%] mx-auto md:w-2xl h-100">
+  <div>
+    <p
+      (click)="volver()"
+      class="text-white underline  hover:text-[#e2cbe8] transition inline-block cursor-pointer text-[16px] md:text-[18px] ml-[30px] md:ml-0"
+    >
+      < Volver
+    </p>
+  </div>
+  @if(errorMessage()){
+  <p class="text-xl text-white">
+    <i class="fa-solid fa-circle-xmark mr-3 mt-8" style="color: #ea0606;"></i>
+    Ha ocurrido algún error en la reserva. Puede que ya esté ocupada :(
   </p>
-</div>
-@if(errorMessage()){
-  <p class="text-xl text-red-500">Ha ocurrido algún error en la reserva. Puede que ya esté ocupada :(</p>
-}
+  } @if(detalle()){
+  <div class="flex w-full flex-col mt-15 max-w-[1200px] mx-auto">
+    <div class="divider divider-error mb-10">
+      <h2 class="text-2xl md:text-4xl">
+        Detalle de <span class="text-red-500 font-semibold">compra</span>
+      </h2>
+    </div>
+  </div>
+  <div class="text-white text-xl flex items-center justify-center flex-col ">
+    <div class="flex flex-col items-start gap-4">
+      <div class="flex gap-2">
+        <p class="text-red-200">Pelicula:</p>
+        <p class="">{{ detalle()?.pelicula }}</p>
+      </div>
+      <div class="flex gap-2">
+        <p class="text-red-200">Butacas:</p>
+        <p class="">{{ detalle()?.butacas }}</p>
+      </div>
+
+      <div class="flex gap-2">
+        <p class="text-red-200">Sala:</p>
+        <p class="">{{ detalle()?.sala | titlecase }}</p>
+      </div>
+
+      <div class="flex gap-2">
+        <p class="text-red-200">Tarifas:</p>
+        @for(tarifa of detalle()?.tarifas; track tarifa.nombre){
+        <p>{{ tarifa.cantidad }}</p>
+        <p>{{ tarifa.nombre | titlecase }}</p>
+        }
+      </div>
+
+      <div class="flex gap-2">
+        <p class="text-xl text-red-200">Total:</p>
+        <p class="text-xl">{{ detalle()?.total | currency : "EUR" }}</p>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <button class="btn btn-error bg-red-600 text-white border-red-600" (click)="comprar()">Comprar</button>
+    </div>
+  </div>
+
+  @if(finalizar()){
+    @if(error()){
+      <h2 class="md:text-2xl text-white text-center mt-4"><i class="fa-solid fa-circle-xmark mr-3" style="color: #ea0606;"></i>Ha ocurrido algún error en la compra. Vuelva a intentarlo :( </h2>
+      <div>
+
+  </div>
+    }@else{
+      @if(value()){
+<h2 class="  md:text-2xl text-white text-center mt-4">Compra realizada! Disfrute la experiencia<i class="fa-solid fa-circle-check ml-3" style="color: #63E6BE;"></i></h2>
+      }
+    }
+
+
+
+
+
+
+
+
+  }
+  }
 </div>

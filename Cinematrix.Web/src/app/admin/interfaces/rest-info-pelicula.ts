@@ -4,7 +4,7 @@ export interface RESTInfoPelicula {
   categorias:     string[];
   calificaciones: string[];
   formatos:       string[];
-  pelicula:       Pelicula;
+  pelicula:       Pelicula|null;
 }
 
 

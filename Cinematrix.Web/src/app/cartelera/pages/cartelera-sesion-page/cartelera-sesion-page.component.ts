@@ -20,6 +20,7 @@ import { Sala } from '../../interfaces/rest-sala.interface';
 import { SalaComponent } from '../../components/sala/sala.component';
 import { CompraFinalComponent } from '../../components/compra-final/compra-final.component';
 import { LocalStorage } from '../../interfaces/local-storage.interface';
+import { Detalle } from '../../interfaces/detalle-compra.interface';
 enum TarifasEnum {
   adulto = 'ADULTO',
   familiar = 'FAMILIAR',
@@ -53,7 +54,6 @@ export class CarteleraSesionPageComponent implements OnInit {
   asientosSelected = signal<string[] | undefined>(undefined);
 
   id = signal<number | undefined>(undefined);
-
 
   estadoProceso = signal<number>(0);
 
@@ -119,7 +119,6 @@ export class CarteleraSesionPageComponent implements OnInit {
             this.cantidadEntradas.set(cantidadEntradas);
 
             // this.ocupacionResource.reload();
-
           }
         }
       }
@@ -179,19 +178,30 @@ export class CarteleraSesionPageComponent implements OnInit {
 
         return of(undefined);
       }
-
-      return this.carteleraService
-        .postSelectedTarifas(request.tarifa, request.id, this.existeCompra())
-        .pipe(map((sala) => structuredClone(sala)));
+      if (this.estadoProceso() === 0 || this.estadoProceso() === 1) {
+        return this.carteleraService
+          .postSelectedTarifas(request.tarifa, request.id, this.existeCompra())
+          .pipe(map((sala) => structuredClone(sala)));
+      }
+      return of(undefined);
     },
   });
 
+  yaTieneValor = signal(false);
   resultadoTarifas = effect(() => {
-
     const value = this.tarifasResource.value();
-    if (value) {
-      this.estadoProceso.set(1)};
+    // if (value) {
+    //   if (this.estadoProceso() === 0) {
+    //     this.estadoProceso.set(1);
+    //   } else {
+    //     if (this.estadoProceso() === 1) this.estadoProceso.set(0);
+    //   }
+    // }
 
+    console.log(value);
+    if (value) {
+      this.estadoProceso.set(1);
+    }
   });
 
   constructor() {
@@ -235,7 +245,7 @@ export class CarteleraSesionPageComponent implements OnInit {
     });
   }
 
-  transformToObject = effect(() => {
+  transformarAObjeto = effect(() => {
     // Transforma la informacion a un array de objetos {"adulto":{cantidad:0, precio:15}} una vez el servicio tiene valor
 
     if (this.carteleraResource.hasValue()) {
@@ -324,11 +334,39 @@ export class CarteleraSesionPageComponent implements OnInit {
     },
   });
 
+  getDetalle=signal<boolean|undefined>(undefined)
+  getDetalleResource=rxResource({
+    request: () => ({
+      getDetalle: this.getDetalle(),
+    }),
+
+    loader: ({ request }) => {
+      if (!request.getDetalle) return of();
+      return this.carteleraService.getDetalleCompra();
+    },
+  });
+
+  detalle=signal<Detalle|undefined>(undefined)
+
+  getDetalleEffect=effect(()=>{
+    const value=this.ocupacionResource.hasValue();
+    if(value){
+      this.getDetalle.set(true)
+      // this.detalle.set(this.ocupacionResource.value())
+
+    }
+
+  })
+
   enviarSeleccionFinal(asientosSelected: string[]) {
     console.log(asientosSelected);
     this.estadoProceso.set(2);
     this.asientosSelected.set(asientosSelected);
     this.ocupacionResource.reload();
+    setTimeout(()=>{
+      this.getDetalleResource.reload()
+    },100)
+
   }
 
   volverASala(estado: number) {
@@ -337,6 +375,7 @@ export class CarteleraSesionPageComponent implements OnInit {
       infoLocal.estado = 1;
     }
     this.carteleraService.saveToLocalStorage(infoLocal);
+    console.log(estado);
     this.estadoProceso.set(estado);
     this.existeCompra.set(true);
     this.tarifasResource.reload();
