@@ -57,7 +57,16 @@ builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 
 
 var app = builder.Build();
-
+/*
+using(var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CinematrixContext>();
+    if (dbContext.Database.IsRelational())
+    {
+        dbContext.Database.Migrate();
+    }
+}
+*/
 // Para ingresar el usuario administrador
 using (var scope = app.Services.CreateScope())
 {
@@ -75,7 +84,7 @@ app.UseCors("AllowAngularDev");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
+app.MapFallbackToFile("index.html");
 //Fin del área de los middlewares
 
 
