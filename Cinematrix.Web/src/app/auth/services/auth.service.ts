@@ -5,7 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { rxResource } from '@angular/core/rxjs-interop';
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
-const API_URL = 'https://localhost:7243/api/usuarios';
+const API_URL = '/api/usuarios';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

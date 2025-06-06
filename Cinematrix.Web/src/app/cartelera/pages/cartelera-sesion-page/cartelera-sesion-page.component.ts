@@ -219,7 +219,7 @@ export class CarteleraSesionPageComponent implements OnInit {
             this.carteleraService.loadFromLocalStorage();
           if (this.estadoProceso() !== 3 && seleccionFromLocalStorage) {
             navigator.sendBeacon(
-              `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
+              `/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
             );
           }
           localStorage.removeItem('seleccion');
@@ -236,7 +236,7 @@ export class CarteleraSesionPageComponent implements OnInit {
         if (nav?.type !== 'reload') {
           if (this.estadoProceso() !== 3) {
             navigator.sendBeacon(
-              `https://localhost:7243/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
+              `/api/cartelera/compra/cancelar/${seleccionFromLocalStorage.idCompra}`
             );
           }
           localStorage.removeItem('seleccion');

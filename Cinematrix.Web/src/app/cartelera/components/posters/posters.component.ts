@@ -9,7 +9,7 @@ import { NgClass } from '@angular/common';
   styleUrl: './posters.component.css',
 })
 export class PostersComponent {
-  urlBase: string = './img/posters/poster-';
+  urlBase: string = '/img/posters/poster-';
   platform: string = 'Unsplash';
   posters = input<Poster[]>();
 

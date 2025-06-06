@@ -13,7 +13,7 @@ import { Sala } from '../interfaces/rest-sala.interface';
 import { LocalStorage } from '../interfaces/local-storage.interface';
 import { DetalleREST } from '../interfaces/detalle-compra-rest.interface';
 
-const API_URL = 'https://localhost:7243/api/cartelera';
+const API_URL = '/api/cartelera';
 
 const loadFromLocalStorage = () => {};
 @Injectable({

@@ -10,7 +10,7 @@ import { SesionesMapper } from '../mappers/sesiones-mapper';
 import { SesionInfoREST } from '../interfaces/sesion-info-rest.interface';
 import { PUTsesion } from '../interfaces/put-sesion.interface';
 
-const API_URL = 'https://localhost:7243/api/admin/';
+const API_URL = '/api/admin/';
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
