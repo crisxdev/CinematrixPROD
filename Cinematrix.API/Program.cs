@@ -57,7 +57,7 @@ builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 
 
 var app = builder.Build();
-/*
+
 using(var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<CinematrixContext>();
@@ -66,7 +66,7 @@ using(var scope = app.Services.CreateScope())
         dbContext.Database.Migrate();
     }
 }
-*/
+
 // Para ingresar el usuario administrador
 using (var scope = app.Services.CreateScope())
 {
